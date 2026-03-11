@@ -3,23 +3,26 @@ package com.glins.android.apps.data.dto
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.SerialName
-import java.security.acl.Owner
 
 data class RepositoryDto(
     val id: Long,
     val name: String,
+    val description: String? = null,
     val url: String,
-    @SerialName("stargazers_count")
+    @SerializedName("stargazers_count")
     val stargazersCount: Int,
     val owner: RepositoryOwnerDto,
-    @SerialName("forks_count")
+    @SerializedName("forks_count")
     val forkCount: Int
 ) {
     fun toDomain(): Repository {
         return Repository(
             id = id,
             name = name,
+            description = description,
+            url = url,
             stars = stargazersCount,
             forks = forkCount,
             author = RepositoryAuthor(
@@ -34,6 +37,8 @@ data class RepositoryDto(
         return RepositoryEntity(
             id = id,
             name = name,
+            description = description,
+            url = url,
             stars = stargazersCount,
             forks = forkCount,
             ownerName = owner.login,

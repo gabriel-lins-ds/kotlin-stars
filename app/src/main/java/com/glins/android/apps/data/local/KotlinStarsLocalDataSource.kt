@@ -11,6 +11,10 @@ class KotlinStarsLocalDataSource(
         return dao.getRepositories()
     }
 
+    suspend fun getRepositoryById(id: Long): RepositoryEntity {
+        return dao.getRepositoryById(id)
+    }
+
     suspend fun saveRepositories(repositories: List<RepositoryEntity>) {
         dao.insertRepositories(repositories)
     }

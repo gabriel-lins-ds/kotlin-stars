@@ -10,6 +10,8 @@ data class RepositoryEntity(
     @PrimaryKey
     val id: Long,
     val name: String,
+    val description: String? = null,
+    val url: String,
     val stars: Int,
     val forks: Int,
     val ownerName: String,
@@ -20,6 +22,8 @@ data class RepositoryEntity(
         return Repository(
             id = id,
             name = name,
+            description = description,
+            url = url,
             stars = stars,
             forks = forks,
             author = RepositoryAuthor(

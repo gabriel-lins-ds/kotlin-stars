@@ -12,6 +12,9 @@ interface RepositoryDao {
     @Query("SELECT * FROM repositories ORDER BY stars DESC")
     suspend fun getRepositories(): List<RepositoryEntity>
 
+    @Query("SELECT * FROM repositories WHERE id = :id LIMIT 1")
+    suspend fun getRepositoryById(id: Long): RepositoryEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRepositories(repositories: List<RepositoryEntity>)
 

@@ -5,7 +5,7 @@ import com.glins.android.apps.data.remote.KotlinStarsRemoteDataSource
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
 
-class KotlinStarsRepositoryImpl (
+class KotlinStarsRepositoryImpl(
     private val remoteDataSource: KotlinStarsRemoteDataSource,
     private val localDataSource: KotlinStarsLocalDataSource
 ) : KotlinStarsRepository {
@@ -22,5 +22,10 @@ class KotlinStarsRepositoryImpl (
             localDataSource.getRepositories()
                 .map { it.toDomain() }
         }
+    }
+
+    override suspend fun getRepositoryById(id: Long): Repository {
+        return localDataSource.getRepositoryById(id)
+            .toDomain()
     }
 }

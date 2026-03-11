@@ -10,6 +10,5 @@ import com.glins.android.apps.data.local.entity.RepositoryEntity
     version = 1
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun repositoryDao(): RepositoryDao
 }
