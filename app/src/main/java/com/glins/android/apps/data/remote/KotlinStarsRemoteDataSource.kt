@@ -1,6 +1,6 @@
 package com.glins.android.apps.data.remote
 
-import com.glins.android.apps.data.dto.RepositoryDto
+import com.glins.android.apps.data.model.RepositoryDto
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
 
 class KotlinStarsRemoteDataSource(

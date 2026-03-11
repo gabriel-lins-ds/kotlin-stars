@@ -1,10 +1,9 @@
-package com.glins.android.apps.data.dto
+package com.glins.android.apps.data.model
 
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
 
 data class RepositoryDto(
     val id: Long,

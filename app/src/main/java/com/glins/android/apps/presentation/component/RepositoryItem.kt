@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.glins.android.apps.core.constants.NetworkConstants.AVATAR_SIZE
+import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 
@@ -32,9 +34,9 @@ import com.glins.android.apps.domain.model.RepositoryAuthor
 fun RepositoryItem(
     repository: Repository,
     modifier: Modifier = Modifier,
+    index: Int = 0,
     onClick: (Repository) -> Unit = {}
 ) {
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -48,11 +50,16 @@ fun RepositoryItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
+            Text(
+                "$index",
+                Modifier.padding(8.dp)
+            )
+
             AsyncImage(
-                model = repository.author.iconUrl,
+                model = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_SUFFIX,
                 contentDescription = "Owner avatar",
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(AVATAR_SIZE.dp)
                     .clip(CircleShape)
             )
 
@@ -61,7 +68,6 @@ fun RepositoryItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-
                 Text(
                     text = repository.name,
                     style = MaterialTheme.typography.titleMedium,
@@ -76,7 +82,6 @@ fun RepositoryItem(
                 )
 
                 if (!repository.description.isNullOrBlank()) {
-
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
@@ -90,7 +95,6 @@ fun RepositoryItem(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row {
-
                     Text(
                         text = "⭐ ${repository.stars}",
                         style = MaterialTheme.typography.bodySmall
@@ -127,5 +131,4 @@ private fun RepositoryItemPreview() {
         )
     )
     RepositoryItem(repository = repository)
-
 }

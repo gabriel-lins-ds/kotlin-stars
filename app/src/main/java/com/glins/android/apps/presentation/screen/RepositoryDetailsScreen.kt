@@ -136,11 +136,9 @@ fun RepositoryDetailsContent(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-
                         Text(
                             text = "Description",
                             style = MaterialTheme.typography.titleMedium,

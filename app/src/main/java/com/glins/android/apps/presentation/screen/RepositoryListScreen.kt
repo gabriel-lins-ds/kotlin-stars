@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,7 +36,6 @@ fun RepositoryListScreen(
     viewModel: RepositoryListViewModel = koinViewModel(),
     onRepositoryClick: (Repository) -> Unit
 ) {
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     RepositoryListContent(
@@ -51,71 +54,82 @@ fun RepositoryListContent(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        when (state) {
-            RepositoryUiState.Loading -> {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            is RepositoryUiState.Error -> {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-
-                    Text(
-                        text = state.message,
-                        style = MaterialTheme.typography.bodyLarge
+    Scaffold { paddingValues ->
+        Box(
+            modifier = modifier.padding(paddingValues).fillMaxSize()
+        ) {
+            when (state) {
+                RepositoryUiState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Button(onClick = onRetry) {
-                        Text("Retry")
-                    }
                 }
-            }
 
-            is RepositoryUiState.Success -> {
-
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 8.dp)
-                ) {
-                    if (state.repositories.isEmpty()) {
-                        item {
-                            EmptyRepositoryListView()
-                        }
-                    }
-
-                    itemsIndexed(
-                        items = state.repositories,
-                        key = { _, repo -> repo.id }
-                    ) { index, repo ->
-                        RepositoryItem(
-                            repository = repo,
-                            onClick = onRepositoryClick
+                is RepositoryUiState.Error -> {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = state.message,
+                            style = MaterialTheme.typography.bodyLarge
                         )
 
-                        if (index == state.repositories.lastIndex) {
-                            onLoadNextPage()
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Button(onClick = onRetry) {
+                            Text("Retry")
                         }
                     }
+                }
 
-                    if (state.isLoadingMore) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator()
+                is RepositoryUiState.Success -> {
+                    val scrollState = rememberLazyListState()
+                    val fetchNextPage: Boolean by remember {
+                        derivedStateOf {
+                            val currentLastVisibleIndex =
+                                scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
+                            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
+                            return@derivedStateOf currentLastVisibleIndex >= (totalItemsCount - 10)
+                        }
+                    }
+                    LazyColumn(
+                        state = scrollState,
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(vertical = 8.dp)
+                    ) {
+                        if (state.repositories.isEmpty()) {
+                            item {
+                                EmptyRepositoryListView()
+                            }
+                        }
+
+                        itemsIndexed(
+                            items = state.repositories,
+                            key = { _, repo -> repo.id }
+                        ) { index, repo ->
+                            RepositoryItem(
+                                repository = repo,
+                                index = index,
+                                onClick = onRepositoryClick
+                            )
+
+                            if (fetchNextPage) {
+                                onLoadNextPage()
+                            }
+                        }
+
+                        if (state.isLoadingMore) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
                             }
                         }
                     }

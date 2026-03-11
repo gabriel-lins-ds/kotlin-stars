@@ -1,7 +1,6 @@
-package com.glins.android.apps.data.dto
+package com.glins.android.apps.data.model
 
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
 
 data class RepositoryOwnerDto(
     @SerializedName("avatar_url")

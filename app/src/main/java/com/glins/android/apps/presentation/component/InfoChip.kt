@@ -29,7 +29,6 @@ fun InfoChip(
     iconTint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
     contentDescription: String? = null
 ) {
-
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(50),
