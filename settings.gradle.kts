@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Github Kotlin Repos"
+rootProject.name = "Kotlin Stars"
 include(":app")

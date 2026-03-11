@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.GithubKotlinRepos" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.KotlinStars" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

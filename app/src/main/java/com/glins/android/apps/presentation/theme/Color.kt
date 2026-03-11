@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui.theme
+package com.glins.android.apps.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

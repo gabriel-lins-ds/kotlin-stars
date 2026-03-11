@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui.activity
+package com.glins.android.apps.presentation.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,14 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.glins.android.apps.ui.theme.GithubKotlinReposTheme
+import com.glins.android.apps.presentation.theme.KotlinStarsTheme
 
-class MainActivity : ComponentActivity() {
+class KotlinStarsListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GithubKotlinReposTheme {
+            KotlinStarsTheme {
                 Scaffold(modifier = Modifier.Companion.fillMaxSize()) { innerPadding ->
                     Column(Modifier.Companion.padding(innerPadding)) {
 
