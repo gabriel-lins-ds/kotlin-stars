@@ -7,10 +7,9 @@ import com.glins.android.apps.presentation.state.RepositoryUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RepositoriesViewModel(
+class RepositoryListViewModel(
     private val repository: KotlinStarsRepository
 ) : ViewModel() {
 
@@ -25,22 +24,18 @@ class RepositoriesViewModel(
     }
 
     fun loadRepositories() {
-
         viewModelScope.launch {
-
             _state.value = RepositoryUiState.Loading
 
             runCatching {
                 repository.getTopRepositories(page = 1)
             }.onSuccess { repos ->
-
                 currentPage = 1
                 isLastPage = repos.isEmpty()
 
                 _state.value =
                     RepositoryUiState.Success(repositories = repos)
             }.onFailure { error ->
-
                 _state.value =
                     RepositoryUiState.Error(
                         message = error.message ?: "Unexpected error"
@@ -56,13 +51,11 @@ class RepositoriesViewModel(
         if (currentState.isLoadingMore || isLastPage) return
 
         viewModelScope.launch {
-
             _state.value = currentState.copy(isLoadingMore = true)
 
             runCatching {
                 repository.getTopRepositories(page = currentPage + 1)
             }.onSuccess { repos ->
-
                 currentPage++
 
                 if (repos.isEmpty()) {

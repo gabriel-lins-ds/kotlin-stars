@@ -1,14 +1,17 @@
 package com.glins.android.apps.presentation.state
 
-sealed interface RepositoriesUiState {
+import com.glins.android.apps.domain.model.Repository
 
-    object Loading : RepositoriesUiState
+sealed interface RepositoryUiState {
+
+    object Loading : RepositoryUiState
 
     data class Success(
-        val repositories: List<Repository>
-    ) : RepositoriesUiState
+        val repositories: List<Repository>,
+        val isLoadingMore: Boolean = false
+    ) : RepositoryUiState
 
     data class Error(
         val message: String
-    ) : RepositoriesUiState
+    ) : RepositoryUiState
 }
