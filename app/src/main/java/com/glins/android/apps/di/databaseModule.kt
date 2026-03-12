@@ -1,6 +1,7 @@
 package com.glins.android.apps.di
 
 import androidx.room.Room
+import com.glins.android.apps.data.local.dao.RemoteKeysDao
 import com.glins.android.apps.data.local.dao.RepositoryDao
 import com.glins.android.apps.data.local.database.AppDatabase
 import org.koin.android.ext.koin.androidContext
@@ -17,5 +18,9 @@ val databaseModule = module {
 
     single<RepositoryDao> {
         get<AppDatabase>().repositoryDao()
+    }
+
+    single<RemoteKeysDao> {
+        get<AppDatabase>().remoteKeysDao()
     }
 }
