@@ -5,6 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.local.database.AppDatabase
 import com.glins.android.apps.data.local.entity.RemoteKeys
 import com.glins.android.apps.data.local.entity.RepositoryEntity
@@ -14,7 +15,7 @@ import com.glins.android.apps.data.remote.api.KotlinStarsApi
 @OptIn(ExperimentalPagingApi::class)
 class RepositoriesRemoteMediator(
     private val api: KotlinStarsApi,
-    private val database: AppDatabase
+    private val localDataSource: KotlinStarsLocalDataSource
 ) : RemoteMediator<Int, RepositoryEntity>() {
 
     override suspend fun load(
@@ -32,8 +33,7 @@ class RepositoriesRemoteMediator(
                 val lastItem = state.lastItemOrNull()
                     ?: return MediatorResult.Success(true)
 
-                val remoteKeys = database.remoteKeysDao()
-                    .remoteKeysRepoId(lastItem.id)
+                val remoteKeys = localDataSource.getRemoteKeysRepoId(lastItem.id)
 
                 remoteKeys?.nextKey
                     ?: return MediatorResult.Success(true)
@@ -47,29 +47,16 @@ class RepositoriesRemoteMediator(
             )
 
             val repos = response.items
-            database.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    database.remoteKeysDao().clearRemoteKeys()
-                    database.repositoryDao().clear()
-                }
-
-                val keys = repos.map {
-                    RemoteKeys(
-                        repoId = it.id,
-                        prevKey = if (page == 1) null else page - 1,
-                        nextKey = if (repos.isEmpty()) null else page + 1
-                    )
-                }
-
-                database.remoteKeysDao().insertAll(keys)
-
-                database.repositoryDao().insertRepositories(
-                    repos.map { it.toEntity() }
-                )
-            }
+            val endOfPaginationReached = repos.size < state.config.pageSize
+            localDataSource.saveRepositories(
+                repos = repos.map { it.toEntity() },
+                page = page,
+                isRefresh = loadType == LoadType.REFRESH,
+                hasReachedEndOfPagination = endOfPaginationReached
+            )
 
             return MediatorResult.Success(
-                endOfPaginationReached = repos.isEmpty()
+                endOfPaginationReached = endOfPaginationReached
             )
         } catch (e: Exception) {
             return MediatorResult.Error(e)

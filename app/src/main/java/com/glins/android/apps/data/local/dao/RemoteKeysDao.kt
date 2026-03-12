@@ -10,7 +10,7 @@ import com.glins.android.apps.data.local.entity.RemoteKeys
 interface RemoteKeysDao {
 
     @Query("SELECT * FROM remote_keys WHERE repoId = :repoId")
-    suspend fun remoteKeysRepoId(repoId: Long): RemoteKeys?
+    suspend fun getRemoteKeysRepoId(repoId: Long): RemoteKeys?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKeys: List<RemoteKeys>)

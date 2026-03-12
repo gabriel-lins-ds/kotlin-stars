@@ -18,8 +18,7 @@ import kotlinx.coroutines.flow.map
 
 class KotlinStarsRepositoryImpl(
     private val localDataSource: KotlinStarsLocalDataSource,
-    private val api: KotlinStarsApi,
-    private val database: AppDatabase
+    private val api: KotlinStarsApi
 ) : KotlinStarsRepository {
 
     @OptIn(ExperimentalPagingApi::class)
@@ -32,10 +31,10 @@ class KotlinStarsRepositoryImpl(
             ),
             remoteMediator = RepositoriesRemoteMediator(
                 api,
-                database
+                localDataSource
             ),
             pagingSourceFactory = {
-                database.repositoryDao().getRepositories()
+                localDataSource.getRepositories()
             }
         ).flow.map { pagingData ->
             pagingData. map { it.toDomain() }
