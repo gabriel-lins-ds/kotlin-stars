@@ -24,8 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.presentation.component.EmptyRepositoryListView
+import com.glins.android.apps.presentation.component.ErrorView
+import com.glins.android.apps.presentation.component.LoadingView
 import com.glins.android.apps.presentation.component.RepositoryItem
 import com.glins.android.apps.presentation.state.RepositoryUiState
 import com.glins.android.apps.presentation.viewmodel.RepositoryListViewModel
@@ -36,105 +41,81 @@ fun RepositoryListScreen(
     viewModel: RepositoryListViewModel = koinViewModel(),
     onRepositoryClick: (Repository) -> Unit
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val repositories =
+        viewModel.repositories.collectAsLazyPagingItems()
 
     RepositoryListContent(
-        state = state,
+        repositories = repositories,
         onRepositoryClick = onRepositoryClick,
-        onLoadNextPage = viewModel::loadNextPage,
-        onRetry = viewModel::retry
+        onRetry = { repositories.retry() }
     )
 }
 
 @Composable
 fun RepositoryListContent(
-    state: RepositoryUiState,
+    repositories: LazyPagingItems<Repository>,
     onRepositoryClick: (Repository) -> Unit,
-    onLoadNextPage: () -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold { paddingValues ->
-        Box(
-            modifier = modifier.padding(paddingValues).fillMaxSize()
+        LazyColumn(
+            modifier = modifier
+                .padding(paddingValues)
+                .fillMaxSize()
         ) {
-            when (state) {
-                RepositoryUiState.Loading -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
+            items(
+                count = repositories.itemCount
+            ) { index ->
+                repositories[index]?.let { repo ->
+                    RepositoryItem(
+                        repository = repo,
+                        index = index,
+                        onClick = { onRepositoryClick(it) }
                     )
                 }
-
-                is RepositoryUiState.Error -> {
-                    Column(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = state.message,
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Button(onClick = onRetry) {
-                            Text("Retry")
-                        }
-                    }
-                }
-
-                is RepositoryUiState.Success -> {
-                    val scrollState = rememberLazyListState()
-                    val fetchNextPage: Boolean by remember {
-                        derivedStateOf {
-                            val currentLastVisibleIndex =
-                                scrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-                            val totalItemsCount = scrollState.layoutInfo.totalItemsCount
-                            return@derivedStateOf currentLastVisibleIndex >= (totalItemsCount - 10)
-                        }
-                    }
-                    LazyColumn(
-                        state = scrollState,
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(vertical = 8.dp)
-                    ) {
-                        if (state.repositories.isEmpty()) {
-                            item {
-                                EmptyRepositoryListView()
-                            }
-                        }
-
-                        itemsIndexed(
-                            items = state.repositories,
-                            key = { _, repo -> repo.id }
-                        ) { index, repo ->
-                            RepositoryItem(
-                                repository = repo,
-                                index = index,
-                                onClick = onRepositoryClick
-                            )
-
-                            if (fetchNextPage) {
-                                onLoadNextPage()
-                            }
-                        }
-
-                        if (state.isLoadingMore) {
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicator()
-                                }
-                            }
-                        }
-                    }
-                }
             }
+
+            when (repositories.loadState.append) {
+                is LoadState.Loading -> {
+                    item {
+                        LoadingView(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        )
+                    }
+                }
+
+                is LoadState.Error -> {
+                    item {
+                        ErrorView(
+                            message = "Erro ao carregar repositórios",
+                            onRetry = onRetry,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                        )
+                    }
+                }
+
+                else -> Unit
+            }
+        }
+
+        when (repositories.loadState.refresh) {
+            is LoadState.Loading -> {
+                LoadingView()
+            }
+
+            is LoadState.Error -> {
+                ErrorView(
+                    message = "Erro ao carregar repositórios",
+                    onRetry = onRetry
+                )
+            }
+
+            else -> Unit
         }
     }
 }

@@ -6,20 +6,7 @@ import com.glins.android.apps.data.local.entity.RepositoryEntity
 class KotlinStarsLocalDataSource(
     private val dao: RepositoryDao
 ) {
-
-    suspend fun getRepositories(): List<RepositoryEntity> {
-        return dao.getRepositories()
-    }
-
     suspend fun getRepositoryById(id: Long): RepositoryEntity {
         return dao.getRepositoryById(id)
-    }
-
-    suspend fun saveRepositories(repositories: List<RepositoryEntity>) {
-        dao.insertRepositories(repositories)
-    }
-
-    suspend fun clear() {
-        dao.clear()
     }
 }

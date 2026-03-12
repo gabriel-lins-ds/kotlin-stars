@@ -1,16 +1,19 @@
 package com.glins.android.apps.data.local.dao
 
+import androidx.compose.ui.geometry.Offset
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.glins.android.apps.data.local.entity.RepositoryEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RepositoryDao {
 
     @Query("SELECT * FROM repositories ORDER BY stars DESC")
-    suspend fun getRepositories(): List<RepositoryEntity>
+    fun getRepositories(): PagingSource<Int, RepositoryEntity>
 
     @Query("SELECT * FROM repositories WHERE id = :id LIMIT 1")
     suspend fun getRepositoryById(id: Long): RepositoryEntity

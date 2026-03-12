@@ -1,26 +1,44 @@
 package com.glins.android.apps.data.repository
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.glins.android.apps.core.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
-import com.glins.android.apps.data.remote.KotlinStarsRemoteDataSource
+import com.glins.android.apps.data.local.database.AppDatabase
+import com.glins.android.apps.data.local.mediator.RepositoriesRemoteMediator
+import com.glins.android.apps.data.mapper.toDomain
+import com.glins.android.apps.data.remote.api.KotlinStarsApi
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class KotlinStarsRepositoryImpl(
-    private val remoteDataSource: KotlinStarsRemoteDataSource,
-    private val localDataSource: KotlinStarsLocalDataSource
+    private val localDataSource: KotlinStarsLocalDataSource,
+    private val api: KotlinStarsApi,
+    private val database: AppDatabase
 ) : KotlinStarsRepository {
-    override suspend fun getTopRepositories(page: Int): List<Repository> {
-        return try {
-            val remoteRepos = remoteDataSource.getRepositories(page)
 
-            localDataSource.saveRepositories(
-                remoteRepos.map { it.toEntity() }
-            )
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getRepositories(): Flow<PagingData<Repository>> {
 
-            remoteRepos.map { it.toDomain() }
-        } catch (_: Exception) {
-            localDataSource.getRepositories()
-                .map { it.toDomain() }
+        return Pager(
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            remoteMediator = RepositoriesRemoteMediator(
+                api,
+                database
+            ),
+            pagingSourceFactory = {
+                database.repositoryDao().getRepositories()
+            }
+        ).flow.map { pagingData ->
+            pagingData. map { it.toDomain() }
         }
     }
 

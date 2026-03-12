@@ -1,5 +1,8 @@
 package com.glins.android.apps.domain.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Repository(
     val id: Long,
     val name: String,
