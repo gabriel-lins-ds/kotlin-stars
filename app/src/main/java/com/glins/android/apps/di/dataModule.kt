@@ -8,15 +8,16 @@ import org.koin.dsl.module
 val dataModule = module {
     single {
         KotlinStarsLocalDataSource(
-            dao = get()
+            repositoryDao = get(),
+            remoteKeysDao = get(),
+            appDatabase = get()
         )
     }
 
     single<KotlinStarsRepository> {
         KotlinStarsRepositoryImpl(
             localDataSource = get(),
-            api = get(),
-            database = get()
+            api = get()
         )
     }
 }
