@@ -1,5 +1,6 @@
-package com.glins.android.apps.data.local.mediator
+package com.glins.android.apps.data.mediator
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -50,6 +51,8 @@ class RepositoriesRemoteMediator(
                     ?: return MediatorResult.Success(true)
             }
         }
+
+        Log.d("Mediator", "loadType: $loadType page: $page")
 
         try {
             val response = api.searchKotlinRepositories(
