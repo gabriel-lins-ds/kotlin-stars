@@ -47,12 +47,12 @@ class RepositoriesRemoteMediator(
 
                 val remoteKeys = localDataSource.getRemoteKeysRepoId(lastItem.id)
 
-                remoteKeys?.nextKey
-                    ?: return MediatorResult.Success(true)
+                remoteKeys?.nextKey ?: run {
+                    val lastPage = state.pages.size
+                    lastPage + 1
+                }
             }
         }
-
-        Log.d("Mediator", "loadType: $loadType page: $page")
 
         try {
             val response = api.searchKotlinRepositories(
