@@ -3,7 +3,7 @@ package com.glins.android.apps.data.remote.api
 import com.glins.android.apps.core.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import retrofit2.http.GET
 import retrofit2.http.Query
-import com.glins.android.apps.data.model.SearchRepositoriesResponseDto
+import com.glins.android.apps.data.remote.dto.SearchRepositoriesResponseDto
 
 interface KotlinStarsApi {
 

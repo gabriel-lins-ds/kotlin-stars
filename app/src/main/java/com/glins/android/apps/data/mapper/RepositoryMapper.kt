@@ -1,7 +1,7 @@
 package com.glins.android.apps.data.mapper
 
 import com.glins.android.apps.data.local.entity.RepositoryEntity
-import com.glins.android.apps.data.model.RepositoryDto
+import com.glins.android.apps.data.remote.dto.RepositoryDto
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 
@@ -37,7 +37,7 @@ fun RepositoryDto.toDomain(): Repository {
     )
 }
 
-fun RepositoryDto.toEntity(): RepositoryEntity {
+fun RepositoryDto.toEntity(lastUpdated: Long): RepositoryEntity {
     return RepositoryEntity(
         id = id,
         name = name,
@@ -47,6 +47,7 @@ fun RepositoryDto.toEntity(): RepositoryEntity {
         forks = forkCount,
         ownerName = owner.login,
         ownerAvatar = owner.avatarUrl,
-        ownerUrl = owner.htmlUrl
+        ownerUrl = owner.htmlUrl,
+        lastUpdated = lastUpdated
     )
 }
