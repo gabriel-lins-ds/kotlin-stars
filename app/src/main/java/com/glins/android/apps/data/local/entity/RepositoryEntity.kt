@@ -2,8 +2,6 @@ package com.glins.android.apps.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.glins.android.apps.domain.model.Repository
-import com.glins.android.apps.domain.model.RepositoryAuthor
 
 @Entity(tableName = "repositories")
 data class RepositoryEntity(
@@ -16,5 +14,6 @@ data class RepositoryEntity(
     val forks: Int,
     val ownerName: String,
     val ownerAvatar: String,
-    val ownerUrl: String
+    val ownerUrl: String,
+    val lastUpdated: Long
 )

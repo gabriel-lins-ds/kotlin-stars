@@ -1,13 +1,11 @@
 package com.glins.android.apps.data.local.dao
 
-import androidx.compose.ui.geometry.Offset
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.glins.android.apps.data.local.entity.RepositoryEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RepositoryDao {
@@ -20,6 +18,9 @@ interface RepositoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRepositories(repositories: List<RepositoryEntity>)
+
+    @Query("SELECT MAX(lastUpdated) FROM repositories")
+    suspend fun getLastUpdated(): Long?
 
     @Query("DELETE FROM repositories")
     suspend fun clear()

@@ -4,10 +4,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
+import com.glins.android.apps.core.constants.NetworkConstants.CACHE_TIMEOUT
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
-import com.glins.android.apps.data.local.database.AppDatabase
-import com.glins.android.apps.data.local.entity.RemoteKeys
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.data.mapper.toEntity
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
@@ -17,6 +15,19 @@ class RepositoriesRemoteMediator(
     private val api: KotlinStarsApi,
     private val localDataSource: KotlinStarsLocalDataSource
 ) : RemoteMediator<Int, RepositoryEntity>() {
+
+    override suspend fun initialize(): InitializeAction {
+        val lastUpdated = localDataSource.getLastUpdated() ?: return InitializeAction.LAUNCH_INITIAL_REFRESH
+
+        val cacheTimeout = CACHE_TIMEOUT
+        val isCacheValid = (System.currentTimeMillis() - lastUpdated) < cacheTimeout
+
+        return if (isCacheValid) {
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+    }
 
     override suspend fun load(
         loadType: LoadType,
@@ -48,10 +59,13 @@ class RepositoriesRemoteMediator(
 
             val repos = response.items
             val endOfPaginationReached = repos.size < state.config.pageSize
+            val now = System.currentTimeMillis()
+            val entities = repos.map { it.toEntity().copy(lastUpdated = now) }
+            val isRefresh = loadType == LoadType.REFRESH
             localDataSource.saveRepositories(
-                repos = repos.map { it.toEntity() },
+                repos = entities,
                 page = page,
-                isRefresh = loadType == LoadType.REFRESH,
+                isRefresh = isRefresh,
                 hasReachedEndOfPagination = endOfPaginationReached
             )
 

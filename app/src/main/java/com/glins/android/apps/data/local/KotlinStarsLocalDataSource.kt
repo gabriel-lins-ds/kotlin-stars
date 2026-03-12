@@ -1,18 +1,12 @@
 package com.glins.android.apps.data.local
 
-import androidx.paging.LoadType
 import androidx.paging.PagingSource
-import androidx.room.Database
-import androidx.room.RoomDatabase
 import androidx.room.withTransaction
-import com.glins.android.apps.core.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import com.glins.android.apps.data.local.dao.RemoteKeysDao
 import com.glins.android.apps.data.local.dao.RepositoryDao
 import com.glins.android.apps.data.local.database.AppDatabase
 import com.glins.android.apps.data.local.entity.RemoteKeys
 import com.glins.android.apps.data.local.entity.RepositoryEntity
-import com.glins.android.apps.data.mapper.toEntity
-import com.glins.android.apps.data.model.RepositoryDto
 
 class KotlinStarsLocalDataSource(
     private val repositoryDao: RepositoryDao,
@@ -53,9 +47,11 @@ class KotlinStarsLocalDataSource(
 
             remoteKeysDao.insertAll(keys)
 
-            repositoryDao.insertRepositories(
-                repos.map { it }
-            )
+            repositoryDao.insertRepositories(repos)
         }
+    }
+
+    suspend fun getLastUpdated(): Long? {
+        return repositoryDao.getLastUpdated()
     }
 }
