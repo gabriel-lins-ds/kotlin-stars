@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 data class RepositoryEntity(
     @PrimaryKey
     val id: Long,
+    val index: Int,
     val name: String,
     val description: String? = null,
     val url: String,

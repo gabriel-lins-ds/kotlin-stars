@@ -48,6 +48,7 @@ import com.glins.android.apps.presentation.component.ErrorView
 import com.glins.android.apps.presentation.component.GithubAuthorImage
 import com.glins.android.apps.presentation.component.InfoChip
 import com.glins.android.apps.presentation.component.LoadingView
+import com.glins.android.apps.presentation.sampledata.RepositorySampleData
 import com.glins.android.apps.presentation.state.RepositoryDetailsUiState
 import com.glins.android.apps.presentation.viewmodel.RepositoryDetailsViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -55,6 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RepositoryDetailsScreen(
     viewModel: RepositoryDetailsViewModel = koinViewModel(),
+    onOpenUrlClick: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
     val state: RepositoryDetailsUiState by viewModel.state.collectAsStateWithLifecycle()
@@ -70,6 +72,7 @@ fun RepositoryDetailsScreen(
 
         is RepositoryDetailsUiState.Success -> RepositoryDetailsContent(
             repository = (state as RepositoryDetailsUiState.Success).repository,
+            onOpenUrlClick = onOpenUrlClick,
             onBackClick = onBackClick
         )
     }
@@ -79,6 +82,7 @@ fun RepositoryDetailsScreen(
 @Composable
 fun RepositoryDetailsContent(
     repository: Repository,
+    onOpenUrlClick: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
     Scaffold(
@@ -163,11 +167,20 @@ fun RepositoryDetailsContent(
 
             Button(
                 onClick = {
-//                    onOpenRepositoryClick()
+                    onOpenUrlClick(repository.url)
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Open on GitHub")
+            }
+
+            Button(
+                onClick = {
+                    onOpenUrlClick(repository.author.profileUrl)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Open Author Profile on GitHub")
             }
         }
     }
@@ -179,22 +192,9 @@ fun RepositoryDetailsContent(
 )
 @Composable
 fun RepositoryDetailsScreenPreview() {
-    val repo = Repository(
-        id = 1,
-        name = "kotlin",
-        url = "https://www.kotlin.com",
-        description = "Kotlin é uma linguagem de programação de alto nível",
-        stars = 52439,
-        forks = 6247,
-        author = RepositoryAuthor(
-            name = "JetBrains",
-            iconUrl = "",
-            profileUrl = "https://github.com/JetBrains"
-        )
-    )
-
     RepositoryDetailsContent(
-        repository = repo,
+        repository = RepositorySampleData.repository(),
+        onOpenUrlClick = {},
         onBackClick = {}
     )
 }

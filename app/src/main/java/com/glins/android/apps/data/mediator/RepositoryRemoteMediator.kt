@@ -66,8 +66,7 @@ class RepositoryRemoteMediator(
 
             val repos = response.items
             val endOfPaginationReached = repos.size < state.config.pageSize
-            val now = System.currentTimeMillis()
-            val entities = repos.map { it.toEntity(lastUpdated = now) }
+            val entities = repos.toEntity(page = page)
             val isRefresh = loadType == LoadType.REFRESH
             localDataSource.saveRepositories(
                 repos = entities,

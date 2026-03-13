@@ -1,5 +1,6 @@
 package com.glins.android.apps.presentation.screen
 
+import android.widget.Button
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -7,13 +8,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -27,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -36,8 +36,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.glins.android.apps.R
@@ -47,8 +49,10 @@ import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.presentation.component.ErrorView
 import com.glins.android.apps.presentation.component.LoadingView
 import com.glins.android.apps.presentation.component.RepositoryItem
+import com.glins.android.apps.presentation.sampledata.RepositorySampleData
 import com.glins.android.apps.presentation.viewmodel.RepositoryListViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -87,7 +91,11 @@ fun RepositoryListContent(
     Scaffold(
         Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
-            TopAppBar({ Text(stringResource(R.string.repo_list_top_bar_title)) })
+            CenterAlignedTopAppBar(
+                {
+                    Text(stringResource(R.string.repo_list_top_bar_title))
+                }
+            )
         },
         floatingActionButton = {
             AnimatedVisibility(
@@ -146,7 +154,6 @@ fun RepositoryListContent(
                     repositories[index]?.let { repo ->
                         RepositoryItem(
                             repository = repo,
-                            index = index,
                             onClick = { onRepositoryClick(it) }
                         )
                     }
@@ -213,6 +220,24 @@ fun RepositoryListContent(
                 else -> Unit
             }
         }
+    }
+}
 
+@Preview(showBackground = true)
+@Composable
+fun RepositoryListContentPreview() {
+
+    val fakeFlow = remember {
+        flowOf(PagingData.from(RepositorySampleData.repositoryList(10)))
+    }
+
+    val lazyPagingItems = fakeFlow.collectAsLazyPagingItems()
+
+    MaterialTheme {
+        RepositoryListContent(
+            repositories = lazyPagingItems,
+            onRepositoryClick = {},
+            onRetry = {}
+        )
     }
 }

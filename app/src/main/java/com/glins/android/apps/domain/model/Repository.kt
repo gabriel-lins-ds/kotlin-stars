@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class Repository(
     val id: Long,
+    val index: Int,
     val name: String,
     val description: String? = null,
     val url: String,

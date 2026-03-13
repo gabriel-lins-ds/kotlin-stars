@@ -24,7 +24,9 @@ import com.glins.android.apps.presentation.screen.RepositoryDetailsScreen
 import com.glins.android.apps.presentation.screen.RepositoryListScreen
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    onOpenUrlClick: (String) -> Unit
+) {
     val navController = rememberNavController()
 
     Box(
@@ -93,6 +95,7 @@ fun AppNavigation() {
                 }
             ) {
                 RepositoryDetailsScreen(
+                    onOpenUrlClick = onOpenUrlClick,
                     onBackClick = {
                         val previousScreen = navController.previousBackStackEntry
                         if (previousScreen != null) {
