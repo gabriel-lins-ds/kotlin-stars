@@ -1,4 +1,4 @@
-package com.glins.android.apps.data.mapper
+package com.glins.android.apps.domain.mapper
 
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.data.remote.dto.RepositoryDto

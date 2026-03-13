@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Kotlin Stars</string>
+
+    <string name="repo_list_top_bar_title">Top Kotlin Repositories</string>
+    <string name="repositories_default_error">Error loading repositories</string>
+    <string name="scroll_to_top_content_description">Scroll to top</string>
 </resources>

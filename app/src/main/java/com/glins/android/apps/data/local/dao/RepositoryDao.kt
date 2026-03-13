@@ -14,7 +14,7 @@ interface RepositoryDao {
     fun getRepositories(): PagingSource<Int, RepositoryEntity>
 
     @Query("SELECT * FROM repositories WHERE id = :id LIMIT 1")
-    suspend fun getRepositoryById(id: Long): RepositoryEntity
+    suspend fun getRepositoryById(id: Long): RepositoryEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRepositories(repositories: List<RepositoryEntity>)

@@ -1,14 +1,11 @@
 package com.glins.android.apps.data.repository
 
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.glins.android.apps.core.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
-import com.glins.android.apps.data.mediator.RepositoriesRemoteMediator
-import com.glins.android.apps.data.mapper.toDomain
+import com.glins.android.apps.domain.mapper.toDomain
+import com.glins.android.apps.data.paging.RepositoryPagerFactory
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
@@ -22,26 +19,17 @@ class KotlinStarsRepositoryImpl(
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getRepositories(): Flow<PagingData<Repository>> {
-
-        return Pager(
-            config = PagingConfig(
-                pageSize = NETWORK_PAGE_SIZE,
-                initialLoadSize = NETWORK_PAGE_SIZE
-            ),
-            remoteMediator = RepositoriesRemoteMediator(
-                api,
-                localDataSource
-            ),
-            pagingSourceFactory = {
-                localDataSource.getRepositories()
+        return RepositoryPagerFactory(localDataSource, api)
+            .create()
+            .flow
+            .map { pagingData ->
+                pagingData.map {
+                    it.toDomain()
+                }
             }
-        ).flow.map { pagingData ->
-            pagingData.map { it.toDomain() }
-        }
     }
 
-    override suspend fun getRepositoryById(id: Long): Repository {
-        return localDataSource.getRepositoryById(id)
-            .toDomain()
+    override suspend fun getRepositoryById(id: Long): Repository? {
+        return localDataSource.getRepositoryById(id)?.toDomain()
     }
 }

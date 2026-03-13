@@ -13,7 +13,7 @@ class KotlinStarsLocalDataSource(
     private val remoteKeysDao: RemoteKeysDao,
     private val appDatabase: AppDatabase
 ) {
-    suspend fun getRepositoryById(id: Long): RepositoryEntity {
+    suspend fun getRepositoryById(id: Long): RepositoryEntity? {
         return repositoryDao.getRepositoryById(id)
     }
 

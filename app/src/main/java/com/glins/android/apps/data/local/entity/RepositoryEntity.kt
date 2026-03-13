@@ -1,9 +1,13 @@
 package com.glins.android.apps.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "repositories")
+@Entity(
+    tableName = "repositories",
+    indices = [Index("stars")]
+)
 data class RepositoryEntity(
     @PrimaryKey
     val id: Long,

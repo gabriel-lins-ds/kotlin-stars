@@ -6,13 +6,16 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.glins.android.apps.core.constants.NetworkConstants.CACHE_TIMEOUT
+import com.glins.android.apps.data.exception.GithubSearchLimitException
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.local.entity.RepositoryEntity
-import com.glins.android.apps.data.mapper.toEntity
+import com.glins.android.apps.domain.mapper.toEntity
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
+import retrofit2.HttpException
+import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-class RepositoriesRemoteMediator(
+class RepositoryRemoteMediator(
     private val api: KotlinStarsApi,
     private val localDataSource: KotlinStarsLocalDataSource
 ) : RemoteMediator<Int, RepositoryEntity>() {
@@ -34,6 +37,7 @@ class RepositoriesRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, RepositoryEntity>
     ): MediatorResult {
+        Log.d("Mediator", "loadType = $loadType")
         val page = when (loadType) {
             LoadType.REFRESH -> 1
 
@@ -43,7 +47,7 @@ class RepositoriesRemoteMediator(
 
             LoadType.APPEND -> {
                 val lastItem = state.lastItemOrNull()
-                    ?: return MediatorResult.Success(true)
+                    ?: return MediatorResult.Success(false)
 
                 val remoteKeys = localDataSource.getRemoteKeysRepoId(lastItem.id)
 
@@ -75,7 +79,14 @@ class RepositoriesRemoteMediator(
             return MediatorResult.Success(
                 endOfPaginationReached = endOfPaginationReached
             )
-        } catch (e: Exception) {
+
+        } catch (e: HttpException) {
+            if (e.code() == 422) {
+                return MediatorResult.Error(GithubSearchLimitException())
+            }
+
+            return MediatorResult.Error(e)
+        } catch (e: IOException) {
             return MediatorResult.Error(e)
         }
     }
