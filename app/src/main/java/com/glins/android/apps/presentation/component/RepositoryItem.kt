@@ -24,8 +24,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.glins.android.apps.core.constants.NetworkConstants.AVATAR_SIZE
 import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
+import com.glins.android.apps.core.constants.UiConstants.AVATAR_SIZE
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 

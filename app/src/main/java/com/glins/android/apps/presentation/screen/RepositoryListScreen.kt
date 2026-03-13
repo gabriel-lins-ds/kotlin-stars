@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -30,7 +32,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.glins.android.apps.R
-import com.glins.android.apps.core.constants.NetworkConstants.FAB_VISIBILITY_THRESHOLD
+import com.glins.android.apps.core.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.presentation.component.ErrorView
 import com.glins.android.apps.presentation.component.LoadingView
@@ -69,6 +71,7 @@ fun RepositoryListContent(
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
             TopAppBar({ Text(stringResource(R.string.repo_list_top_bar_title)) })
         },
@@ -159,6 +162,7 @@ fun RepositoryListContent(
                 val error = (repositories.loadState.refresh as? LoadState.Error)?.error
 
                 ErrorView(
+                    modifier = Modifier.padding(16.dp),
                     message = error?.message
                         ?: stringResource(R.string.repositories_default_error),
                     onRetry = onRetry

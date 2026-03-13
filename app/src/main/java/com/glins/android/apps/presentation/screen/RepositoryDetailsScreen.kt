@@ -1,5 +1,6 @@
 package com.glins.android.apps.presentation.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.glins.android.apps.R
+import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX
+import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
+import com.glins.android.apps.core.constants.UiConstants.AVATAR_SIZE_DETAILS
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 import com.glins.android.apps.presentation.component.ErrorView
@@ -57,6 +61,7 @@ fun RepositoryDetailsScreen(
         RepositoryDetailsUiState.Loading -> LoadingView()
 
         is RepositoryDetailsUiState.Error -> ErrorView(
+            modifier = Modifier.padding(16.dp),
             message = (state as RepositoryDetailsUiState.Error).message,
             onRetry = { }
         )
@@ -75,6 +80,7 @@ fun RepositoryDetailsContent(
     onBackClick: () -> Unit
 ) {
     Scaffold(
+        Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(repository.name) },
@@ -98,10 +104,10 @@ fun RepositoryDetailsContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
-                model = repository.author.iconUrl,
+                model = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(96.dp)
+                    .size(AVATAR_SIZE_DETAILS.dp)
                     .clip(CircleShape)
             )
 
