@@ -40,10 +40,12 @@ import coil.compose.AsyncImage
 import com.glins.android.apps.R
 import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX
 import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
+import com.glins.android.apps.core.constants.UiConstants.AVATAR_SIZE
 import com.glins.android.apps.core.constants.UiConstants.AVATAR_SIZE_DETAILS
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 import com.glins.android.apps.presentation.component.ErrorView
+import com.glins.android.apps.presentation.component.GithubAuthorImage
 import com.glins.android.apps.presentation.component.InfoChip
 import com.glins.android.apps.presentation.component.LoadingView
 import com.glins.android.apps.presentation.state.RepositoryDetailsUiState
@@ -103,12 +105,9 @@ fun RepositoryDetailsContent(
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                model = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(AVATAR_SIZE_DETAILS.dp)
-                    .clip(CircleShape)
+            GithubAuthorImage(
+                url = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX,
+                size = AVATAR_SIZE_DETAILS
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -130,9 +129,8 @@ fun RepositoryDetailsContent(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
                 InfoChip(R.drawable.ic_star, repository.stars.toString())
-                InfoChip(R.drawable.ic_fork_right, repository.forks.toString())
+                InfoChip(R.drawable.ic_fork, repository.forks.toString())
             }
 
             Spacer(modifier = Modifier.height(24.dp))

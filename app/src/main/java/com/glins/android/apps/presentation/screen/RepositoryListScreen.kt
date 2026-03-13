@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,12 +20,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -69,6 +73,8 @@ fun RepositoryListContent(
         derivedStateOf { listState.firstVisibleItemIndex >= FAB_VISIBILITY_THRESHOLD }
     }
     val scope = rememberCoroutineScope()
+    val pullToRefreshState = rememberPullToRefreshState()
+    val isRefreshing = repositories.loadState.refresh is LoadState.Loading
 
     Scaffold(
         Modifier.background(MaterialTheme.colorScheme.background),
@@ -104,72 +110,76 @@ fun RepositoryListContent(
             }
         }
     ) { paddingValues ->
-
-        LazyColumn(
-            state = listState,
-            modifier = modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+        PullToRefreshBox(
+            state = pullToRefreshState,
+            isRefreshing = isRefreshing,
+            onRefresh = { repositories.refresh() },
+            modifier = Modifier.fillMaxSize()
         ) {
-            items(
-                count = repositories.itemCount
-            ) { index ->
-                repositories[index]?.let { repo ->
-                    RepositoryItem(
-                        repository = repo,
-                        index = index,
-                        onClick = { onRepositoryClick(it) }
-                    )
+            LazyColumn(
+                state = listState,
+                modifier = modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
+                items(
+                    count = repositories.itemCount
+                ) { index ->
+                    repositories[index]?.let { repo ->
+                        RepositoryItem(
+                            repository = repo,
+                            index = index,
+                            onClick = { onRepositoryClick(it) }
+                        )
+                    }
+                }
+
+                when (repositories.loadState.append) {
+                    is LoadState.Loading -> {
+                        item {
+                            LoadingView(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
+
+                    is LoadState.Error -> {
+                        val error = (repositories.loadState.append as? LoadState.Error)?.error
+
+                        item {
+                            ErrorView(
+                                message = error?.message
+                                    ?: stringResource(R.string.repositories_default_error),
+                                onRetry = onRetry,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
+
+                    else -> Unit
                 }
             }
 
-            when (repositories.loadState.append) {
-                is LoadState.Loading -> {
-                    item {
-                        LoadingView(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        )
-                    }
-                }
-
+            when (repositories.loadState.refresh) {
                 is LoadState.Error -> {
-                    val error = (repositories.loadState.append as? LoadState.Error)?.error
+                    val error = (repositories.loadState.refresh as? LoadState.Error)?.error
 
-                    item {
-                        ErrorView(
-                            message = error?.message
-                                ?: stringResource(R.string.repositories_default_error),
-                            onRetry = onRetry,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        )
-                    }
+                    ErrorView(
+                        modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                            .pointerInput(Unit) {},
+                        message = error?.message
+                            ?: stringResource(R.string.repositories_default_error),
+                        onRetry = onRetry
+                    )
                 }
 
                 else -> Unit
             }
         }
 
-        when (repositories.loadState.refresh) {
-            is LoadState.Loading -> {
-                LoadingView()
-            }
-
-            is LoadState.Error -> {
-                val error = (repositories.loadState.refresh as? LoadState.Error)?.error
-
-                ErrorView(
-                    modifier = Modifier.padding(16.dp),
-                    message = error?.message
-                        ?: stringResource(R.string.repositories_default_error),
-                    onRetry = onRetry
-                )
-            }
-
-            else -> Unit
-        }
     }
 }

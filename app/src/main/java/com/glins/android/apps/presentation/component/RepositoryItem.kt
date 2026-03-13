@@ -1,7 +1,7 @@
 package com.glins.android.apps.presentation.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,19 +13,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.glins.android.apps.R
 import com.glins.android.apps.core.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
 import com.glins.android.apps.core.constants.UiConstants.AVATAR_SIZE
+import com.glins.android.apps.core.utils.FormatUtils.formatBigNumber
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
 
@@ -40,7 +45,10 @@ fun RepositoryItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onClick(repository) },
+            .clickable(
+                role = Role.Button,
+                onClick = { onClick(repository) }
+            )   ,
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
 
@@ -49,20 +57,23 @@ fun RepositoryItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Text(
-                "#${index + 1}",
-                Modifier.padding(8.dp)
-                    .background(MaterialTheme.colorScheme.primary, CircleShape)
-                    .padding(8.dp),
-                color = MaterialTheme.colorScheme.onPrimary
-            )
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(36.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        text = "${index + 1}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
 
-            AsyncImage(
-                model = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_SUFFIX,
-                contentDescription = "Owner avatar",
-                modifier = Modifier
-                    .size(AVATAR_SIZE.dp)
-                    .clip(CircleShape)
+            GithubAuthorImage(
+                url = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_SUFFIX,
+                size = AVATAR_SIZE
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -80,7 +91,7 @@ fun RepositoryItem(
                 Text(
                     text = repository.author.name,
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 if (!repository.description.isNullOrBlank()) {
@@ -96,16 +107,28 @@ fun RepositoryItem(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painterResource(R.drawable.ic_star),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+
                     Text(
-                        text = "⭐ ${repository.stars}",
+                        text = repository.stars.formatBigNumber(),
                         style = MaterialTheme.typography.bodySmall
                     )
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(Modifier.width(12.dp))
+
+                    Icon(
+                        painterResource(R.drawable.ic_fork), // representa fork
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
 
                     Text(
-                        text = "🍴 ${repository.forks}",
+                        text = repository.forks.formatBigNumber(),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -125,7 +148,7 @@ private fun RepositoryItemPreview() {
         description = "The Kotlin Programming Language.",
         url = "https://github.com/JetBrains/kotlin",
         stars = 52439,
-        forks = 6247,
+        forks = 6050,
         author = RepositoryAuthor(
             name = "JetBrains",
             iconUrl = "",
