@@ -72,6 +72,7 @@ fun RepositoryItem(
             }
 
             GithubAuthorImage(
+                modifier = Modifier.padding(start = 8.dp),
                 url = repository.author.iconUrl + GITHUB_URL_AVATAR_SIZE_SUFFIX,
                 size = AVATAR_SIZE
             )

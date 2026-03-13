@@ -1,5 +1,6 @@
 package com.glins.android.apps.presentation.screen
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,10 +26,14 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,12 +41,14 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.glins.android.apps.R
+import com.glins.android.apps.core.constants.NetworkConstants.REFRESH_TIME_THRESHOLD
 import com.glins.android.apps.core.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.presentation.component.ErrorView
 import com.glins.android.apps.presentation.component.LoadingView
 import com.glins.android.apps.presentation.component.RepositoryItem
 import com.glins.android.apps.presentation.viewmodel.RepositoryListViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -75,6 +82,7 @@ fun RepositoryListContent(
     val scope = rememberCoroutineScope()
     val pullToRefreshState = rememberPullToRefreshState()
     val isRefreshing = repositories.loadState.refresh is LoadState.Loading
+    var lastRefreshTime by remember { mutableLongStateOf(0L) }
 
     Scaffold(
         Modifier.background(MaterialTheme.colorScheme.background),
@@ -113,7 +121,17 @@ fun RepositoryListContent(
         PullToRefreshBox(
             state = pullToRefreshState,
             isRefreshing = isRefreshing,
-            onRefresh = { repositories.refresh() },
+            onRefresh = {
+                val now = System.currentTimeMillis()
+
+                if (now - lastRefreshTime > REFRESH_TIME_THRESHOLD) {
+                    lastRefreshTime = now
+                    scope.launch {
+                        repositories.refresh()
+                        delay(300)
+                    }
+                }
+            },
             modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
@@ -165,16 +183,31 @@ fun RepositoryListContent(
             }
 
             when (repositories.loadState.refresh) {
+                is LoadState.Loading -> {
+                    if (repositories.itemCount == 0) {
+                        LoadingView()
+                    }
+                }
                 is LoadState.Error -> {
                     val error = (repositories.loadState.refresh as? LoadState.Error)?.error
+                    if (repositories.itemCount == 0) {
 
-                    ErrorView(
-                        modifier = Modifier.background(MaterialTheme.colorScheme.background)
-                            .pointerInput(Unit) {},
-                        message = error?.message
-                            ?: stringResource(R.string.repositories_default_error),
-                        onRetry = onRetry
-                    )
+                        ErrorView(
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.background)
+                                .pointerInput(Unit) {},
+                            message = error?.message
+                                ?: stringResource(R.string.repositories_default_error),
+                            onRetry = onRetry
+                        )
+                    } else {
+                        val context = LocalContext.current
+                        Toast.makeText(
+                            context,
+                            error?.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
 
                 else -> Unit
