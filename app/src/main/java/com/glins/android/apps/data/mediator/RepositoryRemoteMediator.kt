@@ -5,12 +5,13 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.glins.android.apps.core.constants.NetworkConstants.CACHE_TIMEOUT
-import com.glins.android.apps.data.exception.GithubSearchLimitException
+import com.glins.android.apps.util.constants.NetworkConstants.CACHE_TIMEOUT
+import com.glins.android.apps.domain.error.DomainException
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.domain.mapper.toEntity
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
+import com.glins.android.apps.domain.mapper.toDomainError
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -79,14 +80,8 @@ class RepositoryRemoteMediator(
                 endOfPaginationReached = endOfPaginationReached
             )
 
-        } catch (e: HttpException) {
-            if (e.code() == 422) {
-                return MediatorResult.Error(GithubSearchLimitException())
-            }
-
-            return MediatorResult.Error(e)
-        } catch (e: IOException) {
-            return MediatorResult.Error(e)
+        } catch (t: Throwable) {
+            return MediatorResult.Error(DomainException(t.toDomainError()))
         }
     }
 }
