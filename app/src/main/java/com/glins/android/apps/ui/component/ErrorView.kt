@@ -32,8 +32,8 @@ fun ErrorView(
     ) {
         val message = when (error) {
             DomainError.GithubSearchLimit -> stringResource(R.string.github_search_limit_exception)
-            DomainError.Network -> stringResource(R.string.github_search_limit_exception)
-            DomainError.Server -> stringResource(R.string.github_search_limit_exception)
+            DomainError.Network -> stringResource(R.string.network_exception)
+            DomainError.Server -> stringResource(R.string.server_unavailable_exception)
             DomainError.GithubRequestLimit -> stringResource(R.string.github_request_limit_exception)
             else -> defaultErrorMessage
         }

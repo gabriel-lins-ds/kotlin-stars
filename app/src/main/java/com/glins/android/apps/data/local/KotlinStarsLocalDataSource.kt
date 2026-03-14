@@ -30,25 +30,32 @@ class KotlinStarsLocalDataSource(
         page: Int,
         isRefresh: Boolean,
         hasReachedEndOfPagination: Boolean
+    ) = appDatabase.withTransaction {
+        saveRepositoriesInternal(repos, page, isRefresh, hasReachedEndOfPagination)
+    }
+
+    suspend fun saveRepositoriesInternal(
+        repos: List<RepositoryEntity>,
+        page: Int,
+        isRefresh: Boolean,
+        hasReachedEndOfPagination: Boolean
     ) {
-        appDatabase.withTransaction {
-            if (isRefresh) {
-                remoteKeysDao.clearRemoteKeys()
-                repositoryDao.clear()
-            }
-
-            val keys = repos.map {
-                RemoteKeys(
-                    repoId = it.id,
-                    prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (hasReachedEndOfPagination) null else page + 1
-                )
-            }
-
-            remoteKeysDao.insertAll(keys)
-
-            repositoryDao.insertRepositories(repos)
+        if (isRefresh) {
+            remoteKeysDao.clearRemoteKeys()
+            repositoryDao.clear()
         }
+
+        val keys = repos.map {
+            RemoteKeys(
+                repoId = it.id,
+                prevKey = if (page == 1) null else page - 1,
+                nextKey = if (hasReachedEndOfPagination) null else page + 1
+            )
+        }
+
+        remoteKeysDao.insertAll(keys)
+
+        repositoryDao.insertRepositories(repos)
     }
 
     suspend fun getLastUpdated(): Long? {

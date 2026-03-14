@@ -5,7 +5,10 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="RepositoryItemPreview">
+      <SelectionState runConfigName="should show default error message when error is null()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="Tests in 'com.glins.android.apps.ui.component'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

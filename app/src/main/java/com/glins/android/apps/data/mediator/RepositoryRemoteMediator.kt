@@ -1,19 +1,16 @@
 package com.glins.android.apps.data.mediator
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.glins.android.apps.util.constants.NetworkConstants.CACHE_TIMEOUT
-import com.glins.android.apps.domain.error.DomainException
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.local.entity.RepositoryEntity
-import com.glins.android.apps.domain.mapper.toEntity
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
+import com.glins.android.apps.domain.error.DomainException
 import com.glins.android.apps.domain.mapper.toDomainError
-import retrofit2.HttpException
-import java.io.IOException
+import com.glins.android.apps.domain.mapper.toEntity
+import com.glins.android.apps.util.constants.NetworkConstants.CACHE_TIMEOUT
 
 @OptIn(ExperimentalPagingApi::class)
 class RepositoryRemoteMediator(
@@ -38,7 +35,6 @@ class RepositoryRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, RepositoryEntity>
     ): MediatorResult {
-        Log.d("Mediator", "loadType = $loadType")
         val page = when (loadType) {
             LoadType.REFRESH -> 1
 
