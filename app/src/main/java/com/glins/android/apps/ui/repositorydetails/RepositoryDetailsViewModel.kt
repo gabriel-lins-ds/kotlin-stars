@@ -30,13 +30,9 @@ class RepositoryDetailsViewModel(
             runCatching {
                 repository.getRepositoryById(repoId)
             }.onSuccess { repo ->
-                repo?.let {
-                    _state.value =
-                        RepositoryDetailsUiState.Success(it)
-                } ?: run {
-                    _state.value =
-                        RepositoryDetailsUiState.Error("Repository not found")
-                }
+                _state.value = repo?.let {
+                    RepositoryDetailsUiState.Success(it)
+                } ?: RepositoryDetailsUiState.Error("Repository not found")
             }.onFailure { error ->
                 _state.value =
                     RepositoryDetailsUiState.Error(
