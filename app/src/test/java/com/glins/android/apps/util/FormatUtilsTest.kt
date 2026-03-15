@@ -69,12 +69,12 @@ class FormatUtilsTest {
     @Test
     fun `should round to integer when decimal part is very small`() {
         // Given
-        val value = 1_040_000
+        val value = 2_049_999
 
         // When
         val result = value.formatBigNumber()
 
         // Then
-        assertEquals("1M", result)
+        assertEquals("2M", result)
     }
 }
