@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.glins.android.apps.R
 import com.glins.android.apps.domain.error.DomainError
-import com.glins.android.apps.domain.error.DomainException
 
 @Composable
 fun ErrorView(
