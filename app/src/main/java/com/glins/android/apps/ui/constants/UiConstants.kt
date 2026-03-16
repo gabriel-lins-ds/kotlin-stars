@@ -1,6 +1,6 @@
-package com.glins.android.apps.util.constants
+package com.glins.android.apps.ui.constants
 
-import com.glins.android.apps.util.constants.NetworkConstants.NETWORK_PAGE_SIZE
+import com.glins.android.apps.data.constants.NetworkConstants.NETWORK_PAGE_SIZE
 
 object UiConstants {
     const val FAB_VISIBILITY_THRESHOLD = NETWORK_PAGE_SIZE / 4

@@ -1,4 +1,4 @@
-package com.glins.android.apps.util
+package com.glins.android.apps.ui.util
 
 object FormatUtils {
     fun Int.formatBigNumber(): String = when {

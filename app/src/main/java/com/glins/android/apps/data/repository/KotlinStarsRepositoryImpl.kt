@@ -5,7 +5,7 @@ import androidx.paging.PagingData
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.paging.RepositoryPagerFactory
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
-import com.glins.android.apps.domain.mapper.toDomain
+import com.glins.android.apps.data.mapper.toDomain
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
 import kotlinx.coroutines.flow.Flow

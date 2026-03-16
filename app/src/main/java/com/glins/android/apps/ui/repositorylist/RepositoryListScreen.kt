@@ -44,8 +44,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.glins.android.apps.R
 import com.glins.android.apps.domain.error.DomainException
-import com.glins.android.apps.util.constants.NetworkConstants.REFRESH_TIME_THRESHOLD
-import com.glins.android.apps.util.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
+import com.glins.android.apps.data.constants.NetworkConstants.REFRESH_TIME_THRESHOLD
+import com.glins.android.apps.ui.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.ui.component.ErrorView
 import com.glins.android.apps.ui.component.LoadingView

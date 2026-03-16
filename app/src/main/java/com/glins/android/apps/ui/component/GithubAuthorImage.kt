@@ -9,8 +9,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.glins.android.apps.util.constants.UiConstants.AVATAR_SIZE
-import com.glins.android.apps.util.IdenticonUtils.getIdenticonRandomId
+import com.glins.android.apps.ui.constants.UiConstants.AVATAR_SIZE
+import com.glins.android.apps.ui.util.IdenticonUtils.getIdenticonRandomId
 
 @Composable
 fun GithubAuthorImage(

@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.glins.android.apps.R
-import com.glins.android.apps.util.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX
-import com.glins.android.apps.util.constants.UiConstants.AVATAR_SIZE_DETAILS
+import com.glins.android.apps.data.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX
+import com.glins.android.apps.ui.constants.UiConstants.AVATAR_SIZE_DETAILS
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.ui.component.ErrorView
 import com.glins.android.apps.ui.component.GithubAuthorImage

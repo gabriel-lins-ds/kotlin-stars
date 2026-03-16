@@ -3,8 +3,8 @@ package com.glins.android.apps.data.paging
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import com.glins.android.apps.util.constants.NetworkConstants.NETWORK_PAGE_PREFETCH_DISTANCE
-import com.glins.android.apps.util.constants.NetworkConstants.NETWORK_PAGE_SIZE
+import com.glins.android.apps.data.constants.NetworkConstants.NETWORK_PAGE_PREFETCH_DISTANCE
+import com.glins.android.apps.data.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.data.mediator.RepositoryRemoteMediator

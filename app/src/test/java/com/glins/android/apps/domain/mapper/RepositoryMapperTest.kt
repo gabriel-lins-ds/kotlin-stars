@@ -2,9 +2,11 @@ package com.glins.android.apps.domain.mapper
 
 import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
+import com.glins.android.apps.data.mapper.toDomain
+import com.glins.android.apps.data.mapper.toEntity
 import com.glins.android.apps.tests.fixtures.createRepositoryDto
 import com.glins.android.apps.tests.fixtures.createRepositoryEntity
-import com.glins.android.apps.util.constants.NetworkConstants.NETWORK_PAGE_SIZE
+import com.glins.android.apps.data.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest

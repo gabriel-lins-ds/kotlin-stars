@@ -1,4 +1,4 @@
-package com.glins.android.apps.domain.mapper
+package com.glins.android.apps.data.mapper
 
 import com.glins.android.apps.domain.error.DomainError
 import retrofit2.HttpException

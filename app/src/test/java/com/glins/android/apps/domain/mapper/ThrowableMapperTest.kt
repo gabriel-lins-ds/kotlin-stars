@@ -1,5 +1,6 @@
 package com.glins.android.apps.domain.mapper
 
+import com.glins.android.apps.data.mapper.toDomainError
 import com.glins.android.apps.domain.error.DomainError
 import com.glins.android.apps.tests.fixtures.createHttpException
 import org.junit.jupiter.api.Assertions.assertEquals

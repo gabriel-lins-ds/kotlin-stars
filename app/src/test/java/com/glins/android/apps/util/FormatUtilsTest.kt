@@ -1,6 +1,6 @@
 package com.glins.android.apps.util
 
-import com.glins.android.apps.util.FormatUtils.formatBigNumber
+import com.glins.android.apps.ui.util.FormatUtils.formatBigNumber
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

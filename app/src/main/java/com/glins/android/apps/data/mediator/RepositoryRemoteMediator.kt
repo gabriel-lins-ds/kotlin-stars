@@ -8,9 +8,9 @@ import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
 import com.glins.android.apps.domain.error.DomainException
-import com.glins.android.apps.domain.mapper.toDomainError
-import com.glins.android.apps.domain.mapper.toEntity
-import com.glins.android.apps.util.constants.NetworkConstants.CACHE_TIMEOUT
+import com.glins.android.apps.data.mapper.toDomainError
+import com.glins.android.apps.data.mapper.toEntity
+import com.glins.android.apps.data.constants.NetworkConstants.CACHE_TIMEOUT
 
 @OptIn(ExperimentalPagingApi::class)
 class RepositoryRemoteMediator(

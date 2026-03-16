@@ -1,4 +1,4 @@
-package com.glins.android.apps.util
+package com.glins.android.apps.ui.util
 
 import com.glins.android.apps.R
 

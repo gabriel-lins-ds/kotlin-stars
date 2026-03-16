@@ -1,8 +1,8 @@
-package com.glins.android.apps.domain.mapper
+package com.glins.android.apps.data.mapper
 
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.glins.android.apps.util.constants.NetworkConstants.NETWORK_PAGE_SIZE
+import com.glins.android.apps.data.constants.NetworkConstants.NETWORK_PAGE_SIZE
 import com.glins.android.apps.data.local.entity.RepositoryEntity
 import com.glins.android.apps.data.remote.dto.RepositoryDto
 import com.glins.android.apps.domain.model.Repository
