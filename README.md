@@ -1,141 +1,191 @@
 # Kotlin Stars
 
-![Kotlin](https://img.shields.io/badge/Kotlin-100000?style=flat&logo=kotlin&logoColor=white)
-![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white)
+Android application that lists the most starred Kotlin repositories on
+GitHub.
 
-Kotlin Stars is an **Android app** that fetches the most starred Kotlin repositories from GitHub. It demonstrates **modern Android development practices**, including:
+The app fetches repositories from the GitHub Search API and displays
+them in a paginated list. Selecting a repository opens a detail screen
+with additional information.
 
-- Kotlin + Coroutines + Flow  
-- Jetpack Compose  
-- MVVM architecture  
-- Clean Architecture  
-- Paging 3 with RemoteMediator  
-- Room database for caching  
-- Dependency Injection with Koin  
-- Unit and Instrumentation testing  
+The project was built as a technical exercise and focuses on code
+organization, testability, and separation of concerns.
 
----
+------------------------------------------------------------------------
 
-## Features
+# Screenshots
 
-- View a **paginated list of Kotlin repositories** from GitHub  
-- **Repository details** screen with author info, stars, forks, and repository URL  
-- **Offline caching** using Room and RemoteMediator  
-- **Error handling** for network issues, GitHub rate limits, and empty results  
-- **Automatic formatting** for large numbers (stars, forks) with `k`/`M` notation  
+| Repository List           | Repository Details           |
+| ------------------------- | ---------------------------- |
+| ![](screenshots/list.gif) | ![](screenshots/details.png) |
 
----
+------------------------------------------------------------------------
 
-## Architecture
+# Features
 
-```text
-+-------------------------+
-|       UI Layer          |
-|  - Compose Screens      |
-|  - UI Components        |
-+-------------------------+
-            |
-            v
-+--------------------------------+
-|    ViewModel Layer             |
-|  - RepositoryListViewModel     |
-|  - RepositoryDetailsViewModel  |
-+--------------------------------+
-            |
-            v
-+-------------------------------+
-|  Repository Layer             |
-|  - KotlinStarsRepositoryImpl  |
-|  - RepositoryPagerFactory     |
-+-------------------------------+
-            |
-            v
-+----------------------------------------+
-| Data Layer                             |
-|  - Remote: KotlinStarsApi              |
-|  - Local: KotlinStarsLocalDataSource   |
-|  - Mediator: RepositoryRemoteMediator  |
-+----------------------------------------+
-```
+-   List most starred Kotlin repositories
+-   Infinite scrolling using Paging 3
+-   Repository details screen
+-   Offline cache using Room
+-   Basic error handling and retry support
 
----
+------------------------------------------------------------------------
 
-## Tech Stack
+# Tech Stack
 
-- **Kotlin** – language  
-- **Jetpack Compose** – UI  
-- **Paging 3** – pagination with RemoteMediator  
-- **Room** – local caching  
-- **Koin** – dependency injection  
-- **JUnit 6 + Mockk** – unit testing  
-- **Coroutines Test** – coroutine testing
+-   Kotlin
+-   Jetpack Compose
+-   Paging 3
+-   Room
+-   Retrofit
+-   Koin (Dependency Injection)
+-   Coroutines / Flow
+-   JUnit & Compose UI tests
 
----
+------------------------------------------------------------------------
 
-## Project Structure
+# Architecture
 
-### `data`
+The project follows a layered architecture inspired by Clean
+Architecture, with MVVM used on the presentation side.
 
-- **Local**: `KotlinStarsLocalDataSource`, DAOs, `AppDatabase`, entities  
-- **Remote**: `KotlinStarsApi`, DTOs  
-- **Mediator**: `RepositoryRemoteMediator`  
-- **Paging**: `RepositoryPagerFactory`  
-- **Repository**: `KotlinStarsRepositoryImpl`  
+The goal is to keep business logic separated from framework code and
+make components easier to test.
 
-### `domain`
+    UI (Compose)
+        │
+    ViewModel
+        │
+    Domain
+        │
+    Repository Interface
+        │
+    Data Layer
+     ├── Remote (GitHub API)
+     └── Local (Room cache)
 
-- Models: `Repository`, `RepositoryAuthor`  
-- Mappers: `RepositoryMapper`, `ThrowableMapper`  
-- Repository interface: `KotlinStarsRepository`  
-- Errors: `DomainError`, `DomainException`  
+Each layer has a specific responsibility.
 
-### `ui`
+------------------------------------------------------------------------
 
-- Screens: `RepositoryListScreen`, `RepositoryDetailsScreen`  
-- ViewModels: `RepositoryListViewModel`, `RepositoryDetailsViewModel`  
-- Components: `ErrorView`, `EmptyRepositoryListView`, `LoadingView`, `RepositoryItem`, `InfoChip`, `GithubAuthorImage`  
-- Navigation: `AppNavigation`  
-- Sample Data: `RepositorySampleData`  
-- Theme: `Color`, `Theme`, `Type`  
+## UI Layer
 
-### `util` & `di`
+The UI is written with Jetpack Compose.
 
-- Utils: `FormatUtils`, `IdenticonUtils`  
-- Constants: `NetworkConstants`, `UiConstants`  
-- DI modules: `dataModule`, `databaseModule`, `networkModule`, `viewModelModule`  
+It is responsible only for rendering state and forwarding user
+interactions to the ViewModel.
 
----
+    ui/
+     ├── component
+     ├── repositorylist
+     ├── repositorydetails
+     ├── navigation
+     └── theme
 
-## How to Run
+UI components are kept small and reusable where possible.
 
-1. Clone the repo:
+------------------------------------------------------------------------
 
-```bash
-git clone https://github.com/gabriel-lins-ds/kotlin-stars.git
-```
+## ViewModels
 
-2. Open in **Android Studio**  
-3. Run on an emulator or device  
+ViewModels coordinate between the UI and the repository layer.
 
----
+They expose state objects that represent what the UI should display.
 
-## Testing
+Example:
 
-- Unit tests: `./gradlew test`  
-- Instrumentation tests: `./gradlew connectedAndroidTest`  
+    RepositoryListViewModel
+    RepositoryDetailsViewModel
 
----
+State is represented using sealed classes to make loading, success, and
+error states explicit.
 
-## Contributing
+------------------------------------------------------------------------
 
-1. Fork the repo  
-2. Create a feature branch: `git checkout -b feature/YourFeature`  
-3. Commit changes: `git commit -m "Add feature"`  
-4. Push: `git push origin feature/YourFeature`  
-5. Open a Pull Request  
+## Domain Layer
 
----
+The domain layer contains the core models used throughout the app.
 
-## License
+    domain/
+     ├── model
+     ├── repository
+     └── error
 
-MIT © Gabriel Lins
+These classes are independent of Android framework code.
+
+------------------------------------------------------------------------
+
+## Data Layer
+
+The data layer handles retrieving and caching repository data.
+
+    data/
+     ├── remote
+     ├── local
+     ├── mediator
+     ├── paging
+     ├── repository
+     └── mapper
+
+The app uses Paging 3 with RemoteMediator to combine network and local
+storage.
+
+Flow:
+
+    GitHub API
+         │
+    RemoteMediator
+         │
+    Room Database
+         │
+    PagingSource
+         │
+    UI
+
+This allows the list to be paginated while caching results locally.
+
+------------------------------------------------------------------------
+
+# Testing
+
+The project includes both unit tests and UI tests.
+
+Unit tests cover:
+
+-   mappers
+-   repository implementation
+-   RemoteMediator
+-   ViewModels
+-   utilities
+
+Compose UI tests cover:
+
+-   reusable UI components
+-   list and detail screen content
+
+Test fixtures are used to avoid repeating setup logic.
+
+------------------------------------------------------------------------
+
+# Running the project
+
+Clone the repository:
+
+    git clone https://github.com/gabriel-lins-ds/kotlin-stars.git
+
+Open it in Android Studio and run the `app` module.
+
+The project uses the public GitHub API and does not require
+authentication.
+
+------------------------------------------------------------------------
+
+# Notes
+
+GitHub's search API limits unauthenticated requests and caps results to
+1000 repositories. This application works within those limits.
+
+------------------------------------------------------------------------
+
+# License
+
+This project is for demonstration purposes.
