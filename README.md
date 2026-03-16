@@ -68,7 +68,7 @@ Kotlin Stars is an **Android app** that fetches the most starred Kotlin reposito
 - **Room** – local caching  
 - **Koin** – dependency injection  
 - **JUnit 6 + Mockk** – unit testing  
-- ⚠️ TODO! ⚠️ **Coroutines Test** – coroutine testing   ⚠️ TODO! ⚠️
+- **Coroutines Test** – coroutine testing
 
 ---
 
@@ -122,7 +122,7 @@ git clone https://github.com/gabriel-lins-ds/kotlin-stars.git
 ## Testing
 
 - Unit tests: `./gradlew test`  
-- ⚠️ TODO! ⚠️ Instrumentation tests: `./gradlew connectedAndroidTest` ⚠️ TODO! ⚠️  
+- Instrumentation tests: `./gradlew connectedAndroidTest`  
 
 ---
 

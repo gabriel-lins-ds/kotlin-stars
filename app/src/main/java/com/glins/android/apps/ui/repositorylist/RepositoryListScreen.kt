@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +51,7 @@ import com.glins.android.apps.ui.component.ErrorView
 import com.glins.android.apps.ui.component.LoadingView
 import com.glins.android.apps.ui.component.RepositoryItem
 import com.glins.android.apps.ui.sampledata.RepositorySampleData
+import com.glins.android.apps.ui.testtag.TestTags
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -76,11 +78,12 @@ fun RepositoryListContent(
     repositories: LazyPagingItems<Repository>,
     onRepositoryClick: (Repository) -> Unit,
     onRetry: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fabVisibilityThreshold: Int = FAB_VISIBILITY_THRESHOLD
 ) {
     val listState = rememberLazyListState()
     val showFab by remember {
-        derivedStateOf { listState.firstVisibleItemIndex >= FAB_VISIBILITY_THRESHOLD }
+        derivedStateOf { listState.firstVisibleItemIndex >= fabVisibilityThreshold }
     }
     val scope = rememberCoroutineScope()
     val pullToRefreshState = rememberPullToRefreshState()
@@ -112,7 +115,8 @@ fun RepositoryListContent(
                             listState.scrollToItem(0)
                         }
                     },
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(16.dp)
+                        .testTag(TestTags.LIST_SCROLL_TO_TOP_FAB),
                     shape = CircleShape
                 ) {
                     Icon(
@@ -140,6 +144,7 @@ fun RepositoryListContent(
                 }
             },
             modifier = Modifier.fillMaxSize()
+                .testTag(TestTags.LIST_PULL_TO_REFRESH_BOX)
         ) {
             LazyColumn(
                 state = listState,
@@ -147,6 +152,7 @@ fun RepositoryListContent(
                 modifier = modifier
                     .padding(paddingValues)
                     .fillMaxSize()
+                    .testTag(TestTags.LIST_LAZY_LAYOUT)
             ) {
                 items(
                     count = repositories.itemCount
@@ -200,7 +206,6 @@ fun RepositoryListContent(
                     val error = (exception as? DomainException)?.error
 
                     if (repositories.itemCount == 0) {
-
                         ErrorView(
                             modifier = Modifier
                                 .background(MaterialTheme.colorScheme.background)
@@ -210,11 +215,13 @@ fun RepositoryListContent(
                         )
                     } else {
                         val context = LocalContext.current
-                        Toast.makeText(
-                            context,
-                            exception?.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        error?.stringRes?.let {
+                            Toast.makeText(
+                                context,
+                                stringResource(it),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
 

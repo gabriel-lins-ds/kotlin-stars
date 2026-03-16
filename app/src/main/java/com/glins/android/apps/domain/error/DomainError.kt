@@ -3,7 +3,7 @@ package com.glins.android.apps.domain.error
 import androidx.annotation.StringRes
 import com.glins.android.apps.R
 
-sealed class DomainError(@StringRes val stringRes: Int) {
+sealed class DomainError(@param:StringRes val stringRes: Int) {
     data object Network : DomainError(R.string.network_exception)
     data object GithubRequestLimit : DomainError(R.string.github_request_limit_exception)
     data object GithubSearchLimit : DomainError(R.string.github_search_limit_exception)

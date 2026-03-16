@@ -43,6 +43,8 @@ android {
 
 dependencies {
 
+    ksp(libs.androidx.room.compiler)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -58,7 +60,6 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.test.core.ktx)
     implementation(libs.androidx.ui.test.junit4)
-    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.koin)
     implementation(libs.koin.compose)
@@ -66,6 +67,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp3.logging.interceptor)
+
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.mockk)
@@ -73,12 +75,15 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(kotlin("test"))
+
     testRuntimeOnly(libs.junit.jupiter.engine)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    testImplementation(kotlin("test"))
 }

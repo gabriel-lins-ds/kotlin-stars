@@ -30,7 +30,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +47,7 @@ import com.glins.android.apps.ui.component.GithubAuthorImage
 import com.glins.android.apps.ui.component.InfoChip
 import com.glins.android.apps.ui.component.LoadingView
 import com.glins.android.apps.ui.sampledata.RepositorySampleData
+import com.glins.android.apps.ui.testtag.TestTags
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -83,7 +86,12 @@ fun RepositoryDetailsContent(
         Modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(repository.name) },
+                title = {
+                    Text(
+                        repository.name,
+                        modifier = Modifier.testTag(TestTags.DETAILS_TOP_APP_BAR_REPO_NAME)
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -128,13 +136,15 @@ fun RepositoryDetailsContent(
             Text(
                 text = repository.name,
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.testTag(TestTags.DETAILS_BODY_REPO_NAME)
             )
 
             Text(
                 text = repository.author.name,
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                color = Color.Gray,
+                modifier = Modifier.testTag(TestTags.DETAILS_BODY_AUTHOR_NAME)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -159,7 +169,8 @@ fun RepositoryDetailsContent(
                         Text(
                             text = "Description",
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.testTag(TestTags.DETAILS_BODY_REPO_DESCRIPTION)
                         )
 
                         Spacer(modifier = Modifier.height(8.dp))
@@ -180,7 +191,7 @@ fun RepositoryDetailsContent(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Open on GitHub")
+                Text(stringResource(R.string.details_open_github_button))
             }
 
             Button(
@@ -189,7 +200,7 @@ fun RepositoryDetailsContent(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Open Author Profile on GitHub")
+                Text(stringResource(R.string.details_open_github_profile_button))
             }
         }
     }
