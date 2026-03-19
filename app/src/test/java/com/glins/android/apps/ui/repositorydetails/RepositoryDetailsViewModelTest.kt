@@ -1,6 +1,7 @@
 package com.glins.android.apps.ui.repositorydetails
 
 import androidx.lifecycle.SavedStateHandle
+import com.glins.android.apps.domain.error.DomainError
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
 import com.glins.android.apps.tests.fixtures.createRepository
 import io.mockk.coEvery
@@ -81,7 +82,7 @@ class RepositoryDetailsViewModelTest {
         // Then
         val state = viewModel.state.value
         assertEquals(
-            RepositoryDetailsUiState.Error("Repository not found"),
+            RepositoryDetailsUiState.Error(error = DomainError.NotFound),
             state
         )
     }
@@ -108,7 +109,7 @@ class RepositoryDetailsViewModelTest {
         // Then
         val state = viewModel.state.value
         assertEquals(
-            RepositoryDetailsUiState.Error("boom"),
+            RepositoryDetailsUiState.Error(DomainError.Unexpected),
             state
         )
     }

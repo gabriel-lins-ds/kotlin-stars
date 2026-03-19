@@ -3,6 +3,7 @@ package com.glins.android.apps.ui.repositorydetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.glins.android.apps.domain.error.DomainError
 import androidx.navigation.toRoute
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
 import com.glins.android.apps.ui.navigation.RepositoryDetailsRoute
@@ -34,12 +35,9 @@ class RepositoryDetailsViewModel(
             }.onSuccess { repo ->
                 _state.value = repo?.let {
                     RepositoryDetailsUiState.Success(it)
-                } ?: RepositoryDetailsUiState.Error("Repository not found")
-            }.onFailure { error ->
-                _state.value =
-                    RepositoryDetailsUiState.Error(
-                        error.message ?: "Unexpected error"
-                    )
+                } ?: RepositoryDetailsUiState.Error(DomainError.NotFound)
+            }.onFailure {
+                _state.value = RepositoryDetailsUiState.Error(DomainError.Unexpected)
             }
         }
     }
