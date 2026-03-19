@@ -3,7 +3,9 @@ package com.glins.android.apps.ui.repositorydetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
+import com.glins.android.apps.ui.navigation.RepositoryDetailsRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,8 +16,8 @@ class RepositoryDetailsViewModel(
     private val repository: KotlinStarsRepository
 ) : ViewModel() {
 
-    private val repoId: Long =
-        savedStateHandle["repoId"] ?: 0
+    private val route = savedStateHandle.toRoute<RepositoryDetailsRoute>()
+    private val repoId: Long = route.repoId
 
     private val _state =
         MutableStateFlow<RepositoryDetailsUiState>(RepositoryDetailsUiState.Loading)
