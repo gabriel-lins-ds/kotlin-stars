@@ -37,6 +37,10 @@ android {
         compose = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
     }
@@ -77,6 +81,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.androidx.navigation.testing)
     testImplementation(kotlin("test"))
 
     testRuntimeOnly(libs.junit.jupiter.engine)
