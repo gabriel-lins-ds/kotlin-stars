@@ -63,7 +63,7 @@ fun RepositoryDetailsScreen(
 
         is RepositoryDetailsUiState.Error -> ErrorView(
             modifier = Modifier.padding(16.dp),
-            defaultErrorMessage = (state as RepositoryDetailsUiState.Error).message,
+            error = (state as RepositoryDetailsUiState.Error).error,
             onRetry = { }
         )
 
@@ -96,7 +96,7 @@ fun RepositoryDetailsContent(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             painter = painterResource(R.drawable.ic_back),
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.details_back_button_content_description)
                         )
                     }
                 },
@@ -108,7 +108,7 @@ fun RepositoryDetailsContent(
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
-                                text = "#${repository.index}",
+                                text = stringResource(R.string.repository_index_prefix, repository.index),
                                 fontSize = 12.sp,
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
@@ -117,10 +117,10 @@ fun RepositoryDetailsContent(
                 }
             )
         }
-    ) { padding ->
+    ) { paddingValues ->
         Column(
             modifier = Modifier
-                .padding(padding)
+                .padding(paddingValues)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp),
@@ -152,8 +152,16 @@ fun RepositoryDetailsContent(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                InfoChip(R.drawable.ic_star, repository.stars.toString())
-                InfoChip(R.drawable.ic_fork, repository.forks.toString())
+                InfoChip(
+                    iconId = R.drawable.ic_star,
+                    text = repository.stars.toString(),
+                    contentDescription = stringResource(R.string.content_description_stars)
+                )
+                InfoChip(
+                    iconId = R.drawable.ic_fork,
+                    text = repository.forks.toString(),
+                    contentDescription = stringResource(R.string.content_description_forks)
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -167,7 +175,7 @@ fun RepositoryDetailsContent(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Description",
+                            text = stringResource(R.string.details_repository_description_title),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.testTag(TestTags.DETAILS_BODY_REPO_DESCRIPTION)
