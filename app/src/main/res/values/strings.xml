@@ -13,4 +13,12 @@
 
     <string name="details_open_github_button">Open on GitHub</string>
     <string name="details_open_github_profile_button">Open Author Profile on GitHub</string>
+    <string name="details_repository_not_found">Repository not found</string>
+    <string name="details_unexpected_error">Unexpected error</string>
+    <string name="details_back_button_content_description">Back</string>
+    <string name="details_repository_description_title">Description</string>
+    <string name="repository_item_author_prefix">by %s</string>
+    <string name="repository_index_prefix">#%d</string>
+    <string name="content_description_stars">stars</string>
+    <string name="content_description_forks">forks</string>
 </resources>

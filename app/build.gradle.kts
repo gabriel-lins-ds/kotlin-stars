@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -36,6 +37,10 @@ android {
         compose = true
     }
 
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
     }
@@ -58,6 +63,7 @@ dependencies {
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.compose.navigation)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.test.core.ktx)
     implementation(libs.androidx.ui.test.junit4)
     implementation(libs.androidx.room.ktx)
@@ -75,6 +81,7 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.androidx.navigation.testing)
     testImplementation(kotlin("test"))
 
     testRuntimeOnly(libs.junit.jupiter.engine)

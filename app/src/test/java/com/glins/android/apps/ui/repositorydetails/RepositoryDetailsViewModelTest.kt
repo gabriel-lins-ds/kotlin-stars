@@ -1,10 +1,17 @@
 package com.glins.android.apps.ui.repositorydetails
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
+import app.cash.turbine.test
+import com.glins.android.apps.domain.error.DomainError
 import com.glins.android.apps.domain.repository.KotlinStarsRepository
 import com.glins.android.apps.tests.fixtures.createRepository
+import com.glins.android.apps.ui.navigation.RepositoryDetailsRoute
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -13,7 +20,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -21,95 +27,68 @@ import org.junit.jupiter.api.Test
 class RepositoryDetailsViewModelTest {
 
     private val repository: KotlinStarsRepository = mockk()
-
     private val testDispatcher = StandardTestDispatcher()
+    private val defaultRepoId = 1L
 
     @BeforeEach
     fun initialize() {
         Dispatchers.setMain(testDispatcher)
+        mockkStatic("androidx.navigation.SavedStateHandleKt")
     }
 
     @AfterEach
     fun tearDown() {
         Dispatchers.resetMain()
+        unmockkAll()
     }
 
     @Test
     fun `should emit Success when repository exists`() = runTest {
-        // Given
-        val repoId = 1L
-        val repositoryModel = createRepository(id = repoId)
+        val repositoryModel = createRepository(id = defaultRepoId)
+        coEvery { repository.getRepositoryById(defaultRepoId) } returns repositoryModel
 
-        coEvery { repository.getRepositoryById(repoId) } returns repositoryModel
+        val viewModel = createViewModel(repoId = defaultRepoId)
 
-        val savedStateHandle = SavedStateHandle(
-            mapOf("repoId" to repoId)
-        )
-
-        // When
-        val viewModel = RepositoryDetailsViewModel(
-            savedStateHandle = savedStateHandle,
-            repository = repository
-        )
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        // Then
-        val state = viewModel.state.value
-        assertTrue(state is RepositoryDetailsUiState.Success)
+        viewModel.state.test {
+            assertEquals(RepositoryDetailsUiState.Loading, awaitItem())
+            assertEquals(RepositoryDetailsUiState.Success(repositoryModel), awaitItem())
+        }
     }
 
     @Test
     fun `should emit Error when repository does not exist`() = runTest {
-        // Given
-        val repoId = 1L
+        coEvery { repository.getRepositoryById(defaultRepoId) } returns null
 
-        coEvery { repository.getRepositoryById(repoId) } returns null
+        val viewModel = createViewModel(repoId = defaultRepoId)
 
-        val savedStateHandle = SavedStateHandle(
-            mapOf("repoId" to repoId)
-        )
-
-        // When
-        val viewModel = RepositoryDetailsViewModel(
-            savedStateHandle = savedStateHandle,
-            repository = repository
-        )
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        // Then
-        val state = viewModel.state.value
-        assertEquals(
-            RepositoryDetailsUiState.Error("Repository not found"),
-            state
-        )
+        viewModel.state.test {
+            assertEquals(RepositoryDetailsUiState.Loading, awaitItem())
+            assertEquals(RepositoryDetailsUiState.Error(DomainError.NotFound), awaitItem())
+        }
     }
 
     @Test
-    fun `should emit Error when repository throws exception`() = runTest {
-        // Given
-        val repoId = 1L
+    fun `should emit Error state with unexpected error when repository fails`() = runTest {
+        coEvery { repository.getRepositoryById(any()) } throws RuntimeException("Network Error")
 
-        coEvery { repository.getRepositoryById(repoId) } throws RuntimeException("boom")
+        val viewModel = createViewModel(repoId = 123L)
 
-        val savedStateHandle = SavedStateHandle(
-            mapOf("repoId" to repoId)
-        )
+        viewModel.state.test {
+            assertEquals(RepositoryDetailsUiState.Loading, awaitItem())
+            assertEquals(RepositoryDetailsUiState.Error(DomainError.Unexpected), awaitItem())
+        }
+    }
 
-        // When
-        val viewModel = RepositoryDetailsViewModel(
-            savedStateHandle = savedStateHandle,
+    private fun createViewModel(repoId: Long = 0): RepositoryDetailsViewModel {
+        val handle = SavedStateHandle()
+
+        every {
+            handle.toRoute(RepositoryDetailsRoute::class, any())
+        } returns RepositoryDetailsRoute(repoId)
+
+        return RepositoryDetailsViewModel(
+            savedStateHandle = handle,
             repository = repository
-        )
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        // Then
-        val state = viewModel.state.value
-        assertEquals(
-            RepositoryDetailsUiState.Error("boom"),
-            state
         )
     }
 }
