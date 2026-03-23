@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "repositories",
-    indices = [Index("stars")]
+    indices = [Index("index")]
 )
 data class RepositoryEntity(
     @PrimaryKey
