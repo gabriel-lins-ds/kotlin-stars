@@ -1,5 +1,6 @@
 package com.glins.android.apps.data.local
 
+import androidx.annotation.VisibleForTesting
 import androidx.paging.PagingSource
 import androidx.room.withTransaction
 import com.glins.android.apps.data.local.dao.RemoteKeysDao
@@ -34,7 +35,8 @@ class KotlinStarsLocalDataSource(
         saveRepositoriesInternal(repos, page, isRefresh, hasReachedEndOfPagination)
     }
 
-    suspend fun saveRepositoriesInternal(
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal suspend fun saveRepositoriesInternal(
         repos: List<RepositoryEntity>,
         page: Int,
         isRefresh: Boolean,

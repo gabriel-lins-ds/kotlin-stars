@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.glins.android.apps.R
-import com.glins.android.apps.data.constants.NetworkConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
 import com.glins.android.apps.ui.constants.UiConstants.AVATAR_SIZE
+import com.glins.android.apps.ui.constants.UiConstants.GITHUB_URL_AVATAR_SIZE_SUFFIX
 import com.glins.android.apps.ui.util.FormatUtils.formatBigNumber
 import com.glins.android.apps.domain.model.Repository
 import com.glins.android.apps.domain.model.RepositoryAuthor
