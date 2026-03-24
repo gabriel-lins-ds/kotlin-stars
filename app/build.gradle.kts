@@ -65,11 +65,11 @@ dependencies {
     implementation(libs.androidx.paging)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.test.core.ktx)
     implementation(libs.androidx.ui.test.junit4)
-    implementation(libs.androidx.room.ktx)
     implementation(libs.koin)
     implementation(libs.koin.compose)
     implementation(libs.coil)
@@ -96,4 +96,9 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation(project(":feature:repository-list"))
+    implementation(project(":feature:repository-details"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
 }

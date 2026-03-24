@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui.theme
+package com.glins.android.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

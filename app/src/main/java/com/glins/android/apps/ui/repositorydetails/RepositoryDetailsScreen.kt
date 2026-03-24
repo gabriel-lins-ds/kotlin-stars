@@ -44,8 +44,8 @@ import com.glins.android.apps.ui.constants.UiConstants.AVATAR_SIZE_DETAILS
 import com.glins.android.apps.ui.constants.UiConstants.GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX
 import com.glins.android.apps.ui.component.ErrorView
 import com.glins.android.apps.ui.component.GithubAuthorImage
-import com.glins.android.apps.ui.component.InfoChip
-import com.glins.android.apps.ui.component.LoadingView
+import com.glins.android.ui.component.InfoChip
+import com.glins.android.ui.component.LoadingView
 import com.glins.android.apps.ui.sampledata.RepositorySampleData
 import com.glins.android.apps.ui.testtag.TestTags
 import org.koin.androidx.compose.koinViewModel

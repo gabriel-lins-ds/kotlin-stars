@@ -18,3 +18,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "Kotlin Stars"
 include(":app")
+include(":core:common")
+include(":core:data")
+include(":core:database")
+include(":core:domain")
+include(":core:ui")
+include(":feature:repository-list")
+include(":feature:repository-details")

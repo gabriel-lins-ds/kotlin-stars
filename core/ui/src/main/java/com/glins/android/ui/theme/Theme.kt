@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui.theme
+package com.glins.android.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
