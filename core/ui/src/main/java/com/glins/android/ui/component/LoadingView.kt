@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui.component
+package com.glins.android.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

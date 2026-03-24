@@ -48,7 +48,7 @@ import com.glins.android.apps.R
 import com.glins.android.apps.ui.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
 import com.glins.android.apps.ui.constants.UiConstants.REFRESH_TIME_THRESHOLD
 import com.glins.android.apps.ui.component.ErrorView
-import com.glins.android.apps.ui.component.LoadingView
+import com.glins.android.ui.component.LoadingView
 import com.glins.android.apps.ui.component.RepositoryItem
 import com.glins.android.apps.ui.sampledata.RepositorySampleData
 import com.glins.android.apps.ui.testtag.TestTags
