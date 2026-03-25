@@ -1,0 +1,61 @@
+package com.glins.android.ui.component
+
+    import androidx.compose.foundation.layout.Arrangement
+    import androidx.compose.foundation.layout.Column
+    import androidx.compose.foundation.layout.Spacer
+    import androidx.compose.foundation.layout.fillMaxSize
+    import androidx.compose.foundation.layout.height
+    import androidx.compose.material3.Button
+    import androidx.compose.material3.MaterialTheme
+    import androidx.compose.material3.Text
+    import androidx.compose.runtime.Composable
+    import androidx.compose.ui.Alignment
+    import androidx.compose.ui.Modifier
+    import androidx.compose.ui.platform.testTag
+    import androidx.compose.ui.res.stringResource
+    import androidx.compose.ui.tooling.preview.Preview
+    import androidx.compose.ui.unit.dp
+    import com.glins.android.domain.error.DomainError
+    import com.glins.android.common.testtag.TestTags
+    import com.glins.android.ui.R
+    import com.glins.android.ui.utils.toErrorMessageRes
+
+@Composable
+    fun ErrorView(
+    modifier: Modifier = Modifier,
+    error: DomainError? = null,
+    defaultErrorMessage: String = stringResource(R.string.repositories_default_error),
+    onRetry: () -> Unit = {}
+    ) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val message = error?.toErrorMessageRes()?.let {
+                stringResource(it)
+            } ?: defaultErrorMessage
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = onRetry,
+                modifier = Modifier.testTag(TestTags.ERROR_RETRY_BUTTON)
+            ) {
+                Text(   stringResource(R.string.retry_button))
+            }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    private fun ErrorViewPreview() {
+        ErrorView(
+            onRetry = {}
+        )
+    }

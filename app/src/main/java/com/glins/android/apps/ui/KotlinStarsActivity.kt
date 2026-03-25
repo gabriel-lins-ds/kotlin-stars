@@ -10,7 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.glins.android.apps.ui.navigation.AppNavigation
-import com.glins.android.apps.ui.theme.KotlinStarsTheme
+import com.glins.android.ui.theme.KotlinStarsTheme
 import androidx.core.net.toUri
 
 class KotlinStarsActivity : ComponentActivity() {

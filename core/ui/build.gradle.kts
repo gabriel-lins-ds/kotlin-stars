@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.coil)
 
     implementation(project(":core:common"))
+    implementation(project(":core:domain"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
