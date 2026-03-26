@@ -3,6 +3,7 @@ package com.glins.android.apps.data.repository
 import com.glins.android.apps.data.local.KotlinStarsLocalDataSource
 import com.glins.android.apps.data.remote.api.KotlinStarsApi
 import com.glins.android.apps.tests.fixtures.createRepositoryEntity
+import com.glins.android.data.repository.KotlinStarsRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -6,9 +6,10 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.glins.android.apps.domain.model.Repository
-import com.glins.android.apps.domain.model.RepositoryAuthor
+import com.glins.android.domain.model.Repository
+import com.glins.android.domain.model.RepositoryAuthor
 import com.glins.android.apps.ui.testtag.TestTags
+import com.glins.android.repository_details.RepositoryDetailsContent
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test

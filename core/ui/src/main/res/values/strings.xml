@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="repository_item_author_prefix">by %s</string>
+
+    <string name="repositories_default_error">Error loading repositories</string>
+    <string name="github_request_limit_exception">Too many requests to GitHub. Please wait a moment and try again.</string> <!--403 & 427-->
+    <string name="github_search_limit_exception">GitHub only allows up to 1,000 repositories to be listed.</string> <!--422-->
+    <string name="server_unavailable_exception">The GitHub server is currently unavailable. Please try again later.</string> <!--5XX-->
+    <string name="network_exception">No internet connection. Please check your network and try again.</string> <!--IOException-->
+    <string name="retry_button">Retry</string>
+    <string name="details_repository_not_found">Repository not found</string>
+    <string name="details_unexpected_error">Unexpected error</string>
+</resources>

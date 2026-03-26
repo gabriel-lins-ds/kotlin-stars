@@ -3,10 +3,12 @@ package com.glins.android.apps.ui.repositorydetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import app.cash.turbine.test
-import com.glins.android.apps.domain.error.DomainError
-import com.glins.android.apps.domain.repository.KotlinStarsRepository
+import com.glins.android.domain.error.DomainError
+import com.glins.android.domain.repository.KotlinStarsRepository
 import com.glins.android.apps.tests.fixtures.createRepository
 import com.glins.android.apps.ui.navigation.RepositoryDetailsRoute
+import com.glins.android.repository_details.RepositoryDetailsUiState
+import com.glins.android.repository_details.RepositoryDetailsViewModel
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

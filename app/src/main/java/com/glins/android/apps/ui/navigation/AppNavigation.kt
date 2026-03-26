@@ -6,8 +6,10 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.glins.android.apps.ui.repositorydetails.RepositoryDetailsScreen
-import com.glins.android.apps.ui.repositorylist.RepositoryListScreen
+import com.glins.android.common.routes.RepositoryDetailsRoute
+import com.glins.android.common.routes.RepositoryListRoute
+import com.glins.android.repository_details.RepositoryDetailsScreen
+import com.glins.android.repository_list.RepositoryListScreen
 
 @Composable
 fun AppNavigation(

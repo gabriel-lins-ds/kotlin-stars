@@ -11,7 +11,8 @@ import com.glins.android.apps.data.remote.dto.RepositoryDto
 import com.glins.android.apps.data.remote.dto.SearchRepositoriesResponseDto
 import com.glins.android.apps.tests.fixtures.createPagingState
 import com.glins.android.apps.tests.fixtures.createRepositoryEntity
-import com.glins.android.apps.data.constants.NetworkConstants.CACHE_TIMEOUT
+import com.glins.android.data.constants.DataConstants.CACHE_TIMEOUT
+import com.glins.android.data.mediator.RepositoryRemoteMediator
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify

@@ -7,8 +7,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.glins.android.apps.domain.error.DomainError
+import com.glins.android.domain.error.DomainError
 import com.glins.android.apps.ui.testtag.TestTags
+import com.glins.android.ui.component.ErrorView
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
