@@ -1,6 +1,5 @@
 package com.glins.android.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +32,7 @@ import com.glins.android.common.utils.FormatUtils.formatBigNumber
 import com.glins.android.domain.model.Repository
 import com.glins.android.domain.model.RepositoryAuthor
 import com.glins.android.ui.R
+import com.glins.android.ui.utils.clickableDebounced
 
 @Composable
 fun RepositoryItem(
@@ -44,10 +44,10 @@ fun RepositoryItem(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable(
+            .clickableDebounced(
                 role = Role.Button,
                 onClick = { onClick(repository) }
-            )   ,
+            ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
 
