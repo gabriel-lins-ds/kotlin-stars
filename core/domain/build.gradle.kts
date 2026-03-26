@@ -2,16 +2,25 @@ plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
+
 kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
     }
 }
+
 dependencies {
     implementation(project(":core:common"))
     implementation(libs.androidx.paging.common)
+    implementation(libs.koin.core)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

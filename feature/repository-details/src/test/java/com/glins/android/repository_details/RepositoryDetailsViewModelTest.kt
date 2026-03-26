@@ -5,7 +5,7 @@ import androidx.navigation.toRoute
 import app.cash.turbine.test
 import com.glins.android.common.routes.RepositoryDetailsRoute
 import com.glins.android.domain.error.DomainError
-import com.glins.android.domain.repository.KotlinStarsRepository
+import com.glins.android.domain.usecase.GetRepositoryByIdUseCase
 import com.glins.android.testing.createRepository
 import io.mockk.coEvery
 import io.mockk.every
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class RepositoryDetailsViewModelTest {
 
-    private val repository: KotlinStarsRepository = mockk()
+    private val getRepositoryByIdUseCase: GetRepositoryByIdUseCase = mockk()
     private val testDispatcher = StandardTestDispatcher()
     private val defaultRepoId = 1L
 
@@ -45,7 +45,7 @@ class RepositoryDetailsViewModelTest {
     @Test
     fun `should emit Success when repository exists`() = runTest {
         val repositoryModel = createRepository(id = defaultRepoId)
-        coEvery { repository.getRepositoryById(defaultRepoId) } returns repositoryModel
+        coEvery { getRepositoryByIdUseCase(defaultRepoId) } returns Result.success(repositoryModel)
 
         val viewModel = createViewModel(repoId = defaultRepoId)
 
@@ -57,7 +57,7 @@ class RepositoryDetailsViewModelTest {
 
     @Test
     fun `should emit Error when repository does not exist`() = runTest {
-        coEvery { repository.getRepositoryById(defaultRepoId) } returns null
+        coEvery { getRepositoryByIdUseCase(defaultRepoId) } returns Result.success(null)
 
         val viewModel = createViewModel(repoId = defaultRepoId)
 
@@ -69,7 +69,7 @@ class RepositoryDetailsViewModelTest {
 
     @Test
     fun `should emit Error state with unexpected error when repository fails`() = runTest {
-        coEvery { repository.getRepositoryById(any()) } throws RuntimeException("Network Error")
+        coEvery { getRepositoryByIdUseCase(any()) } returns Result.failure(RuntimeException("Network Error"))
 
         val viewModel = createViewModel(repoId = 123L)
 
@@ -88,7 +88,7 @@ class RepositoryDetailsViewModelTest {
 
         return RepositoryDetailsViewModel(
             savedStateHandle = handle,
-            repository = repository
+            getRepositoryByIdUseCase = getRepositoryByIdUseCase
         )
     }
 }

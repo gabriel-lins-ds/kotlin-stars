@@ -3,6 +3,7 @@ package com.glins.android.apps
 import android.app.Application
 import com.glins.android.data.di.dataModule
 import com.glins.android.database.di.databaseModule
+import com.glins.android.domain.di.domainModule
 import com.glins.android.network.di.networkModule
 import com.glins.android.repository_details.di.repositoryDetailsModule
 import com.glins.android.repository_list.di.repositoryListModule
@@ -20,6 +21,7 @@ class KotlinStarsApplication : Application() {
                     networkModule,
                     databaseModule,
                     dataModule,
+                    domainModule,
                     repositoryDetailsModule,
                     repositoryListModule
                 )
