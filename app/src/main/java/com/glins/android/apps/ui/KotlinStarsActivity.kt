@@ -1,6 +1,5 @@
 package com.glins.android.apps.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,7 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.glins.android.apps.ui.navigation.AppNavigation
 import com.glins.android.ui.theme.KotlinStarsTheme
-import androidx.core.net.toUri
 
 class KotlinStarsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,14 +21,9 @@ class KotlinStarsActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation(onOpenUrlClick = ::onOpenUrlClick)
+                    AppNavigation()
                 }
             }
         }
-    }
-
-    private fun onOpenUrlClick(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-        startActivity(intent)
     }
 }

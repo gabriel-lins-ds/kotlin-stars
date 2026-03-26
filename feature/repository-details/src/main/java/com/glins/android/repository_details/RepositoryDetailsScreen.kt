@@ -53,7 +53,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RepositoryDetailsScreen(
     viewModel: RepositoryDetailsViewModel = koinViewModel(),
-    onOpenUrlClick: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
     val state: RepositoryDetailsUiState by viewModel.state.collectAsStateWithLifecycle()
@@ -69,7 +68,7 @@ fun RepositoryDetailsScreen(
 
         is RepositoryDetailsUiState.Success -> RepositoryDetailsContent(
             repository = (state as RepositoryDetailsUiState.Success).repository,
-            onOpenUrlClick = onOpenUrlClick,
+            onOpenUrlClick = { url -> viewModel.onOpenUrlClick(url) },
             onBackClick = onBackClick
         )
     }

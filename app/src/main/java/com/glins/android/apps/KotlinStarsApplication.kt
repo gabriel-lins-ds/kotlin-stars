@@ -1,6 +1,7 @@
 package com.glins.android.apps
 
 import android.app.Application
+import com.glins.android.apps.di.appModule
 import com.glins.android.data.di.dataModule
 import com.glins.android.database.di.databaseModule
 import com.glins.android.domain.di.domainModule
@@ -18,6 +19,7 @@ class KotlinStarsApplication : Application() {
             androidContext(this@KotlinStarsApplication)
             modules(
                 listOf(
+                    appModule,
                     networkModule,
                     databaseModule,
                     dataModule,

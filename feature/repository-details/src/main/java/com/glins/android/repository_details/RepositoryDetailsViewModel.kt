@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.glins.android.domain.error.DomainError
 import androidx.navigation.toRoute
 import com.glins.android.common.routes.RepositoryDetailsRoute
+import com.glins.android.common.navigator.BrowserNavigator
 import com.glins.android.domain.usecase.GetRepositoryByIdUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class RepositoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val getRepositoryByIdUseCase: GetRepositoryByIdUseCase,
+    private val browserNavigator: BrowserNavigator
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<RepositoryDetailsRoute>()
@@ -39,5 +41,9 @@ class RepositoryDetailsViewModel(
                     _state.value = RepositoryDetailsUiState.Error(DomainError.Unexpected)
                 }
         }
+    }
+
+    fun onOpenUrlClick(url: String) {
+        browserNavigator.openUrl(url)
     }
 }

@@ -3,6 +3,7 @@ package com.glins.android.repository_details
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import app.cash.turbine.test
+import com.glins.android.common.navigator.BrowserNavigator
 import com.glins.android.common.routes.RepositoryDetailsRoute
 import com.glins.android.domain.error.DomainError
 import com.glins.android.domain.usecase.GetRepositoryByIdUseCase
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Test
 class RepositoryDetailsViewModelTest {
 
     private val getRepositoryByIdUseCase: GetRepositoryByIdUseCase = mockk()
+    private val browserNavigator: BrowserNavigator = mockk()
     private val testDispatcher = StandardTestDispatcher()
     private val defaultRepoId = 1L
 
@@ -88,7 +90,8 @@ class RepositoryDetailsViewModelTest {
 
         return RepositoryDetailsViewModel(
             savedStateHandle = handle,
-            getRepositoryByIdUseCase = getRepositoryByIdUseCase
+            getRepositoryByIdUseCase = getRepositoryByIdUseCase,
+            browserNavigator = browserNavigator
         )
     }
 }
