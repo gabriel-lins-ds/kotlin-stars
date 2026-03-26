@@ -12,9 +12,7 @@ import com.glins.android.repository_details.RepositoryDetailsScreen
 import com.glins.android.repository_list.RepositoryListScreen
 
 @Composable
-fun AppNavigation(
-    onOpenUrlClick: (String) -> Unit
-) {
+fun AppNavigation() {
     val navController = rememberNavController()
     val tweenSpec = remember {
         NavigationDefaults.tweenSpec
@@ -51,7 +49,6 @@ fun AppNavigation(
 
         composable<RepositoryDetailsRoute> {
             RepositoryDetailsScreen(
-                onOpenUrlClick = onOpenUrlClick,
                 onBackClick = { navController.navigateUp() }
             )
         }
