@@ -9,6 +9,7 @@ import com.glins.android.domain.model.Repository
 import com.glins.android.domain.model.RepositoryAuthor
 import com.glins.android.network.dto.RepositoryDto
 import com.glins.android.network.dto.RepositoryOwnerDto
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 
 fun <Key : Any, Value : Any> createPagingState(
@@ -98,7 +99,7 @@ fun createRemoteKeys(
 fun createHttpException(code: Int): HttpException {
     val response = retrofit2.Response.error<Any>(
         code,
-        okhttp3.ResponseBody.create(null, "")
+        "".toResponseBody(null)
     )
     return HttpException(response)
 }
