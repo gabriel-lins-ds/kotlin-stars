@@ -8,9 +8,10 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.glins.android.apps.domain.model.Repository
-import com.glins.android.apps.domain.model.RepositoryAuthor
+import com.glins.android.domain.model.Repository
+import com.glins.android.domain.model.RepositoryAuthor
 import com.glins.android.apps.ui.testtag.TestTags
+import com.glins.android.repository_list.RepositoryListContent
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertTrue
 import org.junit.Rule
