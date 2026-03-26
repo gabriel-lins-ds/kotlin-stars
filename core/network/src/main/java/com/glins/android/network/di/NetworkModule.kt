@@ -3,13 +3,22 @@ package com.glins.android.network.di
 import com.glins.android.network.BuildConfig
 import com.glins.android.network.api.KotlinStarsApi
 import java.util.concurrent.TimeUnit
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 val networkModule = module {
+    single {
+        Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+        }
+    }
+
     single {
         HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
@@ -29,10 +38,11 @@ val networkModule = module {
     }
 
     single {
+        val contentType = "application/json".toMediaType()
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(get())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(get<Json>().asConverterFactory(contentType))
             .build()
     }
 

@@ -12,12 +12,13 @@ import kotlinx.coroutines.flow.Flow
 
 class KotlinStarsRepositoryImpl(
     private val localDataSource: KotlinStarsLocalDataSource,
-    private val api: KotlinStarsApi
+    private val api: KotlinStarsApi,
+    private val pagerFactory: RepositoryPagerFactory
 ) : KotlinStarsRepository {
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getRepositories(): Flow<PagingData<Repository>> {
-        return RepositoryPagerFactory(localDataSource, api)
+        return pagerFactory
             .create()
             .flow
             .toDomain()

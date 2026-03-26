@@ -66,8 +66,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.navigation)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.paging.common)
-    implementation(libs.androidx.paging.compose)
 
     // Dependency Injection
     implementation(libs.koin.android)
