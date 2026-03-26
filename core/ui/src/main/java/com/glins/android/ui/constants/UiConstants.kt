@@ -12,4 +12,5 @@ object UiConstants {
     const val GITHUB_URL_AVATAR_SIZE_SUFFIX = "&s=${AVATAR_SIZE}"
     const val GITHUB_URL_AVATAR_SIZE_DETAILS_SUFFIX = "&s=${AVATAR_SIZE_DETAILS}"
     const val REFRESH_TIME_THRESHOLD = 10 * 1000L // 10 seconds
+    const val CLICK_DEBOUNCE_THRESHOLD = 500L
 }
