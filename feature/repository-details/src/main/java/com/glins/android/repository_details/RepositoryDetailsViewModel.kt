@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.glins.android.domain.error.DomainError
 import androidx.navigation.toRoute
-import com.glins.android.domain.repository.KotlinStarsRepository
 import com.glins.android.common.routes.RepositoryDetailsRoute
+import com.glins.android.domain.usecase.GetRepositoryByIdUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class RepositoryDetailsViewModel(
     savedStateHandle: SavedStateHandle,
-    private val repository: KotlinStarsRepository
+    private val getRepositoryByIdUseCase: GetRepositoryByIdUseCase,
 ) : ViewModel() {
 
     private val route = savedStateHandle.toRoute<RepositoryDetailsRoute>()
@@ -30,15 +30,14 @@ class RepositoryDetailsViewModel(
 
     private fun loadRepository() {
         viewModelScope.launch {
-            runCatching {
-                repository.getRepositoryById(repoId)
-            }.onSuccess { repo ->
-                _state.value = repo?.let {
-                    RepositoryDetailsUiState.Success(it)
-                } ?: RepositoryDetailsUiState.Error(DomainError.NotFound)
-            }.onFailure {
-                _state.value = RepositoryDetailsUiState.Error(DomainError.Unexpected)
-            }
+            getRepositoryByIdUseCase(repoId)
+                .onSuccess { repo ->
+                    _state.value = repo?.let {
+                        RepositoryDetailsUiState.Success(it)
+                    } ?: RepositoryDetailsUiState.Error(DomainError.NotFound)
+                }.onFailure {
+                    _state.value = RepositoryDetailsUiState.Error(DomainError.Unexpected)
+                }
         }
     }
 }
