@@ -10,8 +10,7 @@ val dataModule = module {
 
     single<KotlinStarsRepository> { 
         KotlinStarsRepositoryImpl(
-            localDataSource = get(), 
-            api = get(),
+            localDataSource = get(),
             pagerFactory = get()
         ) 
     }

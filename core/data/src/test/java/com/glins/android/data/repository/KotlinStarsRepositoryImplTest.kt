@@ -24,7 +24,7 @@ class KotlinStarsRepositoryImplTest {
 
     @BeforeEach
     fun setup() {
-        repository = KotlinStarsRepositoryImpl(localDataSource, api, pagerFactory)
+        repository = KotlinStarsRepositoryImpl(localDataSource, pagerFactory)
     }
 
     @Test

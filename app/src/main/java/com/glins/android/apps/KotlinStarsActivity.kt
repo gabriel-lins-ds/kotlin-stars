@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui
+package com.glins.android.apps
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.glins.android.apps.ui.navigation.AppNavigation
+import com.glins.android.apps.navigation.AppNavigation
 import com.glins.android.ui.theme.KotlinStarsTheme
 
 class KotlinStarsActivity : ComponentActivity() {

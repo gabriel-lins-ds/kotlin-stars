@@ -35,7 +35,7 @@ class KotlinStarsLocalDataSource(
         saveRepositoriesInternal(repos, page, isRefresh, hasReachedEndOfPagination)
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.Companion.PRIVATE)
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal suspend fun saveRepositoriesInternal(
         repos: List<RepositoryEntity>,
         page: Int,
