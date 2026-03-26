@@ -31,6 +31,19 @@ android {
     buildFeatures {
         compose = true
     }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
@@ -49,7 +62,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:domain"))
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing"))
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
