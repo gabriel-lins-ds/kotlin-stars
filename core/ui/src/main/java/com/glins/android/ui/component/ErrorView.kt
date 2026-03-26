@@ -41,13 +41,15 @@ package com.glins.android.ui.component
                 style = MaterialTheme.typography.bodyLarge
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            if (error?.isRetryable != false) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = onRetry,
-                modifier = Modifier.testTag(TestTags.ERROR_RETRY_BUTTON)
-            ) {
-                Text(   stringResource(R.string.retry_button))
+                Button(
+                    onClick = onRetry,
+                    modifier = Modifier.testTag(TestTags.ERROR_RETRY_BUTTON)
+                ) {
+                    Text(stringResource(R.string.retry_button))
+                }
             }
         }
     }

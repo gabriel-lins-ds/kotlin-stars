@@ -1,4 +1,4 @@
-package com.glins.android.apps.ui.navigation
+package com.glins.android.apps.navigation
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec

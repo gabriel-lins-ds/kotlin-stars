@@ -42,18 +42,15 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.glins.android.domain.error.DomainException
+import com.glins.android.common.testtag.TestTags
 import com.glins.android.domain.model.Repository
-import com.glins.android.ui.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
-import com.glins.android.ui.constants.UiConstants.REFRESH_TIME_THRESHOLD
 import com.glins.android.ui.component.ErrorView
 import com.glins.android.ui.component.LoadingView
 import com.glins.android.ui.component.RepositoryItem
-import com.glins.android.ui.sampledata.RepositorySampleData
-import com.glins.android.common.testtag.TestTags
-import com.glins.android.ui.component.ErrorView
-import com.glins.android.ui.component.RepositoryItem
+import com.glins.android.ui.constants.UiConstants.FAB_VISIBILITY_THRESHOLD
 import com.glins.android.ui.constants.UiConstants.REFRESH_TIME_THRESHOLD
+import com.glins.android.ui.sampledata.RepositorySampleData
+import com.glins.android.ui.utils.toDomainError
 import com.glins.android.ui.utils.toErrorMessageRes
 import com.glins.android.ui.R as UiR
 import kotlinx.coroutines.delay
@@ -169,7 +166,7 @@ fun RepositoryListContent(
                     }
                 }
 
-                when (repositories.loadState.append) {
+                when (val appendState = repositories.loadState.append) {
                     is LoadState.Loading -> {
                         item {
                             LoadingView(
@@ -181,12 +178,9 @@ fun RepositoryListContent(
                     }
 
                     is LoadState.Error -> {
-                        val exception = (repositories.loadState.append as? LoadState.Error)?.error
-                        val error = (exception as? DomainException)?.error
-
                         item {
                             ErrorView(
-                                error = error,
+                                error = appendState.toDomainError(),
                                 onRetry = onRetry,
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -199,15 +193,14 @@ fun RepositoryListContent(
                 }
             }
 
-            when (repositories.loadState.refresh) {
+            when (val refreshState = repositories.loadState.refresh) {
                 is LoadState.Loading -> {
                     if (repositories.itemCount == 0) {
                         LoadingView()
                     }
                 }
                 is LoadState.Error -> {
-                    val exception = (repositories.loadState.refresh as? LoadState.Error)?.error
-                    val error = (exception as? DomainException)?.error
+                    val error = refreshState.toDomainError()
 
                     if (repositories.itemCount == 0) {
                         ErrorView(

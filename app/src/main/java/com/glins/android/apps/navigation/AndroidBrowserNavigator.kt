@@ -1,4 +1,4 @@
-package com.glins.android.apps.navigator
+package com.glins.android.apps.navigation
 
 import android.content.Context
 import android.content.Intent

@@ -1,11 +1,13 @@
 package com.glins.android.network.dto
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RepositoryOwnerDto(
-    @SerializedName("avatar_url")
+    @SerialName("avatar_url")
     val avatarUrl: String,
-    @SerializedName("html_url")
+    @SerialName("html_url")
     val htmlUrl: String,
     val login: String
 )

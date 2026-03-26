@@ -57,14 +57,31 @@ class ErrorViewTest {
     }
 
     @Test
-    fun should_display_retry_button() {
+    fun should_display_retry_button_when_error_is_retryable() {
         composeTestRule.setContent {
-            ErrorView(defaultErrorMessage = "Error")
+            ErrorView(
+                error = DomainError.Network,
+                defaultErrorMessage = "Error"
+            )
         }
 
         composeTestRule
             .onNodeWithTag(TestTags.ERROR_RETRY_BUTTON)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun should_not_display_retry_button_when_error_is_not_retryable() {
+        composeTestRule.setContent {
+            ErrorView(
+                error = DomainError.GithubSearchLimit,
+                defaultErrorMessage = "Error"
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTag(TestTags.ERROR_RETRY_BUTTON)
+            .assertDoesNotExist()
     }
 
     @Test

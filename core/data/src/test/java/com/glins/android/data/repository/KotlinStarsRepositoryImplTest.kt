@@ -1,6 +1,7 @@
 package com.glins.android.data.repository
 
 import com.glins.android.database.datasource.KotlinStarsLocalDataSource
+import com.glins.android.data.paging.RepositoryPagerFactory
 import com.glins.android.network.api.KotlinStarsApi
 import com.glins.android.testing.createRepositoryEntity
 import io.mockk.coEvery
@@ -17,12 +18,13 @@ class KotlinStarsRepositoryImplTest {
 
     private val localDataSource: KotlinStarsLocalDataSource = mockk()
     private val api: KotlinStarsApi = mockk()
+    private val pagerFactory: RepositoryPagerFactory = mockk()
 
     private lateinit var repository: KotlinStarsRepositoryImpl
 
     @BeforeEach
     fun setup() {
-        repository = KotlinStarsRepositoryImpl(localDataSource, api)
+        repository = KotlinStarsRepositoryImpl(localDataSource, pagerFactory)
     }
 
     @Test
